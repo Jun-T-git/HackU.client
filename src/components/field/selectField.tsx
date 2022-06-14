@@ -22,7 +22,7 @@ const SelectField: React.VFC<Props> = ({
       </label>
       <select
         id={`select-${fieldId}`}
-        className="block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding bg-no-repeat px-3 py-2 text-base font-normal text-gray-700 transition ease-in-out focus:outline-none"
+        className="border-soli block min-h-[48px] w-full rounded border border-gray-300 bg-white bg-clip-padding bg-no-repeat px-4 py-2.5 text-base font-normal text-gray-700 transition ease-in-out focus:outline-none"
         {...props}
       >
         {options.map((option) => (
