@@ -15,10 +15,10 @@ const TextField: React.VFC<Props> = ({
       <label htmlFor={`text-${fieldId}`} className="text-sm">
         {label}
       </label>
-      <input 
+      <input
+        id={`text-${fieldId}`}
         type='text'
         className='border-b w-full py-2 focus:outline-none focus:border-b-2 focus:border-gray-500'
-        placeholder={fieldId}
         {...props}
       />
     </div>
