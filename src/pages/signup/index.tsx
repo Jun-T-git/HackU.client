@@ -1,5 +1,6 @@
 import React from "react";
 import SelectField from "~/components/field/selectField";
+import TextField from "~/components/field/textField";
 import { prefectures } from "~/libs/constants/prefectures";
 
 const Index: React.VFC = () => {
@@ -13,6 +14,14 @@ const Index: React.VFC = () => {
           options={prefectures.map((prefecture) => {
             return { name: prefecture.name, value: prefecture.id };
           })}
+        />
+        <TextField
+          fieldId="email"
+          label="メールアドレス"
+        />
+        <TextField
+          fieldId="password"
+          label="パスワード"
         />
       </form>
     </>
