@@ -37,7 +37,7 @@ const Index: React.VFC = () => {
         </li>
         <li>
           <Link href="/signup">
-            <a>アカウントをお持ちでない方はこちら</a>
+            <a className="hover:text-blue-500">アカウントをお持ちでない方はこちら</a>
           </Link>
         </li>
       </ul>

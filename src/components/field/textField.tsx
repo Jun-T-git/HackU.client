@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef } from "react";
+import React, { ComponentPropsWithoutRef, useState, useEffect } from "react";
 
 type Props = {
   fieldId: string;
@@ -10,6 +10,16 @@ const TextField: React.VFC<Props> = ({
   label,
   ...props
 }) => {
+  const [text, setText] = useState("")
+  useEffect(
+    () => {
+      console.log(label, text);
+    },
+    [text]
+  );
+  const handleChange = (e) => {
+    setText (() => e.target.value);
+  }
   return (
     <div className="flex flex-col gap-y-0.5">
       <label htmlFor={`text-${fieldId}`} className="text-sm">
@@ -17,9 +27,11 @@ const TextField: React.VFC<Props> = ({
       </label>
       <input
         id={`text-${fieldId}`}
-        type='text'
+        type={`${fieldId}`}
         className='border-b w-full py-2 focus:outline-none focus:border-b-2 focus:border-gray-500'
         {...props}
+        value={text}
+        onChange={handleChange}
       />
     </div>
   );
