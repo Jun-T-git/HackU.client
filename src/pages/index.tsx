@@ -37,7 +37,6 @@ const Index: React.VFC = () => {
     <>
       <div className="py-10 text-center">
         <h1 className="text-xl font-bold">日本地図ページ</h1>
-        <p className="text-blue-500">Next.js + TypeScript + TailwindCSS</p>
 
         <div className="flex justify-center bg-[#333333]">
           <JapanMap edges={edges} />
