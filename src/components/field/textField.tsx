@@ -17,7 +17,6 @@ const TextField: React.VFC<Props> = ({
       </label>
       <input
         id={`text-${fieldId}`}
-        type='text'
         className='border-b w-full py-2 focus:outline-none focus:border-b-2 focus:border-gray-500'
         {...props}
       />

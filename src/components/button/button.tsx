@@ -9,6 +9,7 @@ const Button: React.VFC<Props> = ({ children, className, ...props }) => {
         "rounded bg-blue-500 px-3 py-1 font-bold text-white hover:opacity-80 " +
         className
       }
+      type={props.type}
       {...props}
     >
       {children}
