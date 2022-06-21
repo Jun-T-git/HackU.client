@@ -18,14 +18,15 @@ type Prefectures = {
 
 type Props = {
   edges: Edge[];
+  onClickPrefecture: (prefecture: string) => void;
 };
 
 const WIDTH = 390;
 const HEIGHT = 420;
-const FILL_COLOR = "#555555";
-const STROKE_COLOR = "#333333";
+const FILL_COLOR = "#333333";
+const STROKE_COLOR = "#222222";
 
-const JapanMap: React.VFC<Props> = ({ edges }) => {
+const JapanMap: React.VFC<Props> = ({ edges, onClickPrefecture }) => {
   const [prefectures, setPrefectures] = useState<Prefectures>({});
 
   const projection = () => {
@@ -49,7 +50,6 @@ const JapanMap: React.VFC<Props> = ({ edges }) => {
       {}
     );
     setPrefectures(prefectureObjects);
-    console.log(prefectureObjects);
   }, []);
 
   return (
@@ -59,8 +59,8 @@ const JapanMap: React.VFC<Props> = ({ edges }) => {
           const prefecture = prefectures[key];
           return (
             <path
-              onMouseOver={() => {
-                console.log(prefecture.name);
+              onClick={() => {
+                onClickPrefecture(prefecture.name);
               }}
               key={`path-${i}`}
               d={prefecture.d}
