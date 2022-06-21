@@ -18,15 +18,21 @@ type Prefectures = {
 
 type Props = {
   edges: Edge[];
+  focusedPrefecture: string;
   onClickPrefecture: (prefecture: string) => void;
 };
 
-const WIDTH = 390;
-const HEIGHT = 420;
+const WIDTH = 500;
+const HEIGHT = 500;
 const FILL_COLOR = "#333333";
 const STROKE_COLOR = "#282828";
+const FOCUSED_COLOR = "#777777";
 
-const JapanMap: React.VFC<Props> = ({ edges, onClickPrefecture }) => {
+const JapanMap: React.VFC<Props> = ({
+  edges,
+  focusedPrefecture,
+  onClickPrefecture,
+}) => {
   const [prefectures, setPrefectures] = useState<Prefectures>({});
 
   const projection = () => {
@@ -60,7 +66,7 @@ const JapanMap: React.VFC<Props> = ({ edges, onClickPrefecture }) => {
           return (
             <path
               onClick={() => {
-                onClickPrefecture(prefecture.name);
+                prefecture.name && onClickPrefecture(prefecture.name);
               }}
               key={`path-${i}`}
               d={prefecture.d}
@@ -71,6 +77,19 @@ const JapanMap: React.VFC<Props> = ({ edges, onClickPrefecture }) => {
             />
           );
         })}
+        {focusedPrefecture && (
+          <path
+            onClick={() => {
+              onClickPrefecture(prefectures[focusedPrefecture].name);
+            }}
+            key="path-focused"
+            d={prefectures[focusedPrefecture].d}
+            className="prefecture"
+            fill={FILL_COLOR}
+            stroke={FOCUSED_COLOR}
+            strokeWidth={0.5}
+          />
+        )}
         {Object.keys(prefectures).length &&
           edges.map((edge, i) => {
             const centroid1 = prefectures[edge.nodes[0]].centroid;
