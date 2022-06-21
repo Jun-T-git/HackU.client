@@ -63,14 +63,16 @@ const Index: React.VFC = () => {
           </li>
         </ul>
 
-        <div className="flex min-h-[70vh] w-full justify-center py-5">
+        <div className="flex justify-center py-5">
           <TransformWrapper wheel={{ step: 0.05 }}>
             <TransformComponent>
-              <JapanMap
-                edges={edges}
-                focusedPrefecture={selectedPrefecture}
-                onClickPrefecture={onClickPrefecture}
-              />
+              <div className="min-h-[80vh] w-full">
+                <JapanMap
+                  edges={edges}
+                  focusedPrefecture={selectedPrefecture}
+                  onClickPrefecture={onClickPrefecture}
+                />
+              </div>
             </TransformComponent>
           </TransformWrapper>
         </div>
