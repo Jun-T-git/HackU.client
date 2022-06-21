@@ -1,10 +1,12 @@
-import React from "react";
-import Button from "~/components/button/button";
+import React, { useState } from "react";
 import Link from "next/link";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import JapanMap, { Edge } from "~/components/japanMap";
+import Drawer from "~/components/dialog/drawer";
+import "react-spring-bottom-sheet/dist/style.css";
 
-const OFFLINE_COLOR = "#ff000040";
-const ONLINE_COLOR = "#00ff0040";
+const OFFLINE_COLOR = "#ff000020";
+const ONLINE_COLOR = "#00ff0020";
 
 const edges: Edge[] = [
   { nodes: ["広島県", "東京都"], color: ONLINE_COLOR },
@@ -33,41 +35,69 @@ const edges: Edge[] = [
 ];
 
 const Index: React.VFC = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
+
+  const onClickPrefecture = (prefecture: string) => {
+    setSelectedPrefecture(prefecture);
+    setIsDrawerOpen(true);
+  };
+
   return (
     <>
-      <div className="py-10 text-center">
-        <h1 className="text-xl font-bold">日本地図ページ</h1>
-
-        <div className="flex justify-center bg-[#333333]">
-          <JapanMap edges={edges} />
-        </div>
-
-        <Button
-          className="my-5"
-          onClick={() => {
-            alert("Clicked!");
-          }}
-        >
-          ボタンサンプル
-        </Button>
-
-        <ul className="flex flex-col gap-2">
+      <div className="min-h-screen bg-[#222222] text-center">
+        <ul className="flex justify-end gap-3.5 py-4 px-3">
           <li>
-            <Link href="/users">
-              <a>ユーザ一覧ページ</a>
+            <Link href="/signup">
+              <a className="rounded border border-gray-300 px-3 py-2.5 font-bold text-gray-300">
+                新規登録
+              </a>
             </Link>
           </li>
           <li>
             <Link href="/signin">
-              <a>サインインページ</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/signup">
-              <a>サインアップページ</a>
+              <a className="rounded border border-gray-300 px-3 py-2.5 font-bold text-gray-300">
+                ログイン
+              </a>
             </Link>
           </li>
         </ul>
+
+        <div className="flex justify-center py-5">
+          <TransformWrapper wheel={{ step: 0.05 }}>
+            <TransformComponent>
+              <div className="min-h-[80vh] w-full">
+                <JapanMap
+                  edges={edges}
+                  focusedPrefecture={selectedPrefecture}
+                  onClickPrefecture={onClickPrefecture}
+                />
+              </div>
+            </TransformComponent>
+          </TransformWrapper>
+        </div>
+
+        <Drawer
+          open={isDrawerOpen}
+          onDismiss={() => setIsDrawerOpen(false)}
+          blocking={false}
+          header={
+            <span className="mt-1 block w-full rounded bg-[#fe133c] py-1 font-bold text-white">
+              {selectedPrefecture}
+            </span>
+          }
+          snapPoints={({ maxHeight }) => [maxHeight * 0.4, maxHeight * 0.9]}
+        >
+          <ul className="flex flex-col py-3 px-5 text-center">
+            {Array(30)
+              .fill(null)
+              .map((e, i) => (
+                <li key={`list-${i}`} className="border-b border-gray-400 py-2">
+                  {selectedPrefecture} - {i + 1}
+                </li>
+              ))}
+          </ul>
+        </Drawer>
       </div>
     </>
   );

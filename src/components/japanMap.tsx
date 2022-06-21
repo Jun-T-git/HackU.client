@@ -18,14 +18,21 @@ type Prefectures = {
 
 type Props = {
   edges: Edge[];
+  focusedPrefecture: string;
+  onClickPrefecture: (prefecture: string) => void;
 };
 
-const WIDTH = 390;
-const HEIGHT = 420;
-const FILL_COLOR = "#555555";
-const STROKE_COLOR = "#333333";
+const WIDTH = 500;
+const HEIGHT = 500;
+const FILL_COLOR = "#333333";
+const STROKE_COLOR = "#282828";
+const FOCUSED_COLOR = "#777777";
 
-const JapanMap: React.VFC<Props> = ({ edges }) => {
+const JapanMap: React.VFC<Props> = ({
+  edges,
+  focusedPrefecture,
+  onClickPrefecture,
+}) => {
   const [prefectures, setPrefectures] = useState<Prefectures>({});
 
   const projection = () => {
@@ -49,7 +56,6 @@ const JapanMap: React.VFC<Props> = ({ edges }) => {
       {}
     );
     setPrefectures(prefectureObjects);
-    console.log(prefectureObjects);
   }, []);
 
   return (
@@ -59,8 +65,8 @@ const JapanMap: React.VFC<Props> = ({ edges }) => {
           const prefecture = prefectures[key];
           return (
             <path
-              onMouseOver={() => {
-                console.log(prefecture.name);
+              onClick={() => {
+                prefecture.name && onClickPrefecture(prefecture.name);
               }}
               key={`path-${i}`}
               d={prefecture.d}
@@ -71,6 +77,19 @@ const JapanMap: React.VFC<Props> = ({ edges }) => {
             />
           );
         })}
+        {focusedPrefecture && (
+          <path
+            onClick={() => {
+              onClickPrefecture(prefectures[focusedPrefecture].name);
+            }}
+            key="path-focused"
+            d={prefectures[focusedPrefecture].d}
+            className="prefecture"
+            fill={FILL_COLOR}
+            stroke={FOCUSED_COLOR}
+            strokeWidth={0.5}
+          />
+        )}
         {Object.keys(prefectures).length &&
           edges.map((edge, i) => {
             const centroid1 = prefectures[edge.nodes[0]].centroid;
@@ -81,18 +100,21 @@ const JapanMap: React.VFC<Props> = ({ edges }) => {
                   d={`M${centroid1[0]},${centroid1[1]} L${centroid2[0]},${centroid2[1]}`}
                   stroke={edge.color}
                   strokeWidth={1}
+                  className="pointer-events-none"
                 />
                 <circle
                   cx={centroid1[0]}
                   cy={centroid1[1]}
                   r="2"
                   fill={edge.color}
+                  className="pointer-events-none"
                 />
                 <circle
                   cx={centroid2[0]}
                   cy={centroid2[1]}
                   r="2"
                   fill={edge.color}
+                  className="pointer-events-none"
                 />
               </g>
             );
