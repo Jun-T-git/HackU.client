@@ -1,23 +1,23 @@
 import React from "react";
 
 type Props = {
-  cardId: number;
-  name: string;
-  prefecture: string;
+  showItem: {
+    cardId: number,
+    name: string,
+    prefecture: string,
+  },
 };
 
 const Card: React.VFC<Props> = ({
-  cardId,
-  name,
-  prefecture,
+  showItem,
 }) => {
   return (
-    <div id={`select-${cardId}`} className="grid grid-cols-2 max-w-sm rounded overflow-hidden shadow-lg text-center bg-white border-gray-500">
+    <div id={`card-${showItem.cardId}`} className="grid grid-cols-2 max-w-sm rounded overflow-hidden shadow-lg text-center bg-white border-gray-500">
       <h1>
-        {name}
+        {showItem.name}
       </h1>
       <h2>
-        {prefecture}
+        {showItem.prefecture}
       </h2>
     </div>
   );
