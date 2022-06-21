@@ -1,24 +1,37 @@
 import React from "react";
+import Button from "~/components/button/button" 
 
-type Props = {
-  showItem: {
-    cardId: number,
-    name: string,
-    prefecture: string,
-  },
+export type User = {
+  id: number,
+  name: string,
+  hobby: string,
 };
 
+type Props = 
+  User & {onClickConnect: (toUser: (string)) => void}
+
+
 const Card: React.VFC<Props> = ({
-  showItem,
+  id,
+  name,
+  hobby,
+  onClickConnect,
 }) => {
   return (
-    <div id={`card-${showItem.cardId}`} className="grid grid-cols-2 max-w-sm rounded overflow-hidden shadow-lg text-center bg-white border-gray-500">
+    <div id={`card-${id}`} className="grid grid-cols-3 rounded overflow-hidden shadow-lg text-center bg-white border-b border-gray-400 py-2">
       <h1>
-        {showItem.name}
+        {name}
       </h1>
       <h2>
-        {showItem.prefecture}
+        {hobby}
       </h2>
+      <Button
+        className="max-w-max bg-red-500"
+        onClickConnect={onClickConnect}
+        connectToUser={name}
+      >
+        つながる
+      </Button>
     </div>
   );
 };

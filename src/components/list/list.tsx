@@ -1,20 +1,23 @@
 import React from "react";
-import Card from "~/components/card/card"
+import Card, { User } from "~/components/card/card"
 
 type Props = {
-  listId: String;
-  showList: Object[];
+  listId,
+  users: User[],
+  onClickConnect: (toUser: string) => void;
 };
 
 const List: React.VFC<Props> = ({
   listId,
-  showList,
+  users,
+  onClickConnect,
 }) => {
-  const list = showList.map((showItem, index) => {
+  const list = users.map((user, index) => {
     return (
       <li key={index} className="m-0.5">
         <Card
-          showIem={showItem}
+          {...user}
+          onClickConnect={onClickConnect}
         />
       </li>
     );

@@ -1,8 +1,11 @@
 import React, { ComponentPropsWithoutRef } from "react";
 
-type Props = ComponentPropsWithoutRef<"button">;
+type Props = {
+  onClickConnect?: (toUser: string) => void;
+  connectToUser?: string;
+} & ComponentPropsWithoutRef<"button">;
 
-const Button: React.VFC<Props> = ({ children, className, ...props }) => {
+const Button: React.VFC<Props> = ({ children, onClickConnect, className, connectToUser, ...props}) => {
   return (
     <button
       className={
@@ -11,6 +14,9 @@ const Button: React.VFC<Props> = ({ children, className, ...props }) => {
       }
       type={props.type}
       {...props}
+      onClick={() => {
+        onClickConnect(connectToUser);
+      }}
     >
       {children}
     </button>
