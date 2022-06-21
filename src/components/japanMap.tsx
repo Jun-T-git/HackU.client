@@ -24,7 +24,7 @@ type Props = {
 const WIDTH = 390;
 const HEIGHT = 420;
 const FILL_COLOR = "#333333";
-const STROKE_COLOR = "#222222";
+const STROKE_COLOR = "#282828";
 
 const JapanMap: React.VFC<Props> = ({ edges, onClickPrefecture }) => {
   const [prefectures, setPrefectures] = useState<Prefectures>({});
@@ -81,18 +81,21 @@ const JapanMap: React.VFC<Props> = ({ edges, onClickPrefecture }) => {
                   d={`M${centroid1[0]},${centroid1[1]} L${centroid2[0]},${centroid2[1]}`}
                   stroke={edge.color}
                   strokeWidth={1}
+                  className="pointer-events-none"
                 />
                 <circle
                   cx={centroid1[0]}
                   cy={centroid1[1]}
                   r="2"
                   fill={edge.color}
+                  className="pointer-events-none"
                 />
                 <circle
                   cx={centroid2[0]}
                   cy={centroid2[1]}
                   r="2"
                   fill={edge.color}
+                  className="pointer-events-none"
                 />
               </g>
             );

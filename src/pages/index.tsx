@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import JapanMap, { Edge } from "~/components/japanMap";
 import Drawer from "~/components/dialog/drawer";
 import "react-spring-bottom-sheet/dist/style.css";
@@ -62,9 +63,13 @@ const Index: React.VFC = () => {
           </li>
         </ul>
 
-        <div className="flex justify-center py-5">
-          <JapanMap edges={edges} onClickPrefecture={onClickPrefecture} />
-        </div>
+        <TransformWrapper wheel={{ step: 0.05 }}>
+          <TransformComponent>
+            <div className="flex min-h-[80vh] justify-center py-5">
+              <JapanMap edges={edges} onClickPrefecture={onClickPrefecture} />
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
 
         <Drawer
           open={isDrawerOpen}
