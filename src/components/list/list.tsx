@@ -17,7 +17,7 @@ const List: React.VFC<Props> = ({
       <li key={index} className="m-0.5">
         <Card
           {...user}
-          onClickConnect={onClickConnect}
+          onClickConnect={(name) => {onClickConnect(name);}}
         />
       </li>
     );

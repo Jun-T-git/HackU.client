@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import JapanMap, { Edge } from "~/components/japanMap";
@@ -39,22 +39,15 @@ const edges: Edge[] = [
 const Index: React.VFC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
-  const [connectToUser, setConnectToUser] = useState<string>("");
 
-  useEffect(
-    () => {
-      if (connectToUser !== "") {
-        alert(connectToUser+"とつながりますか？");
-      }
-    },
-    [connectToUser]
-  );
   const onClickPrefecture = (prefecture: string) => {
     setSelectedPrefecture(prefecture);
     setIsDrawerOpen(true);
   };
   const onClickConnect = (toUser: string) => {
-    setConnectToUser(toUser);
+    if (toUser !== "") {
+      alert(toUser+"とつながりますか？");
+    }
     setIsDrawerOpen(false);
   }
   let user = [];
@@ -111,7 +104,7 @@ const Index: React.VFC = () => {
               <List
                 listId="user"
                 users={user}
-                onClickConnect={onClickConnect}
+                onClickConnect={(name) => onClickConnect(name)}
               />
           </ul>
         </Drawer>

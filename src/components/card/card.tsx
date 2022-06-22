@@ -27,8 +27,7 @@ const Card: React.VFC<Props> = ({
       </h2>
       <Button
         className="max-w-max bg-red-500"
-        onClickConnect={onClickConnect}
-        connectToUser={name}
+        onClick={() => {name && onClickConnect(name);}}
       >
         つながる
       </Button>
