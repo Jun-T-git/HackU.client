@@ -4,7 +4,7 @@ import Button from "~/components/button/button"
 export type User = {
   id: number,
   name: string,
-  hobby: string,
+  prefecture: string,
 };
 
 type Props = 
@@ -14,17 +14,17 @@ type Props =
 const Card: React.VFC<Props> = ({
   id,
   name,
-  hobby,
+  prefecture,
   onClickConnect,
 }) => {
   return (
     <div id={`card-${id}`} className="grid grid-cols-3 rounded overflow-hidden shadow-lg text-center bg-white border-b border-gray-400 py-2">
-      <h1>
+      <span>
         {name}
-      </h1>
-      <h2>
-        {hobby}
-      </h2>
+      </span>
+      <span>
+        {prefecture}
+      </span>
       <Button
         className="max-w-max bg-red-500"
         onClick={() => {name && onClickConnect(name);}}
