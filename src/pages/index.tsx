@@ -3,6 +3,8 @@ import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import JapanMap, { Edge } from "~/components/japanMap";
 import Drawer from "~/components/dialog/drawer";
+import List from "~/components/list/list"
+import { dummyUsers } from "~/ts/dummy"
 import "react-spring-bottom-sheet/dist/style.css";
 
 const OFFLINE_COLOR = "#ff000020";
@@ -42,6 +44,16 @@ const Index: React.VFC = () => {
     setSelectedPrefecture(prefecture);
     setIsDrawerOpen(true);
   };
+  const onClickConnect = (toUser: string) => {
+    if (toUser !== "") {
+      alert(toUser+"とつながりますか？");
+    }
+    setIsDrawerOpen(false);
+  }
+  let user = [];
+  if (selectedPrefecture) {
+    user = dummyUsers.filter(dummyData => dummyData.key === selectedPrefecture)[0]["value"];
+  }
 
   return (
     <>
@@ -89,13 +101,11 @@ const Index: React.VFC = () => {
           snapPoints={({ maxHeight }) => [maxHeight * 0.4, maxHeight * 0.9]}
         >
           <ul className="flex flex-col py-3 px-5 text-center">
-            {Array(30)
-              .fill(null)
-              .map((e, i) => (
-                <li key={`list-${i}`} className="border-b border-gray-400 py-2">
-                  {selectedPrefecture} - {i + 1}
-                </li>
-              ))}
+              <List
+                listId="user"
+                users={user}
+                onClickConnect={(name) => onClickConnect(name)}
+              />
           </ul>
         </Drawer>
       </div>

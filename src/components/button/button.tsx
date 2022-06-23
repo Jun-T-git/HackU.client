@@ -2,7 +2,7 @@ import React, { ComponentPropsWithoutRef } from "react";
 
 type Props = ComponentPropsWithoutRef<"button">;
 
-const Button: React.VFC<Props> = ({ children, className, ...props }) => {
+const Button: React.VFC<Props> = ({ children, className, ...props}) => {
   return (
     <button
       className={
