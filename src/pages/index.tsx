@@ -3,8 +3,9 @@ import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import JapanMap, { Edge } from "~/components/japanMap";
 import Drawer from "~/components/dialog/drawer";
-import List from "~/components/list/list"
-import { dummyUsers } from "~/ts/dummy"
+import List from "~/components/list/list";
+import Search from "~/components/search/search";
+import { dummyUsers } from "~/ts/dummy";
 import "react-spring-bottom-sheet/dist/style.css";
 
 const OFFLINE_COLOR = "#ff000020";
@@ -35,12 +36,17 @@ const edges: Edge[] = [
   { nodes: ["高知県", "愛媛県"], color: OFFLINE_COLOR },
   { nodes: ["兵庫県", "長野県"], color: OFFLINE_COLOR },
 ];
+let searchType = "";
+let drawerHeader = "";
+let user = [];
 
 const Index: React.VFC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
+  const [searchUserName, setSearchUserName] = useState<string>("");
 
   const onClickPrefecture = (prefecture: string) => {
+    searchType = "prefecture";
     setSelectedPrefecture(prefecture);
     setIsDrawerOpen(true);
   };
@@ -50,15 +56,30 @@ const Index: React.VFC = () => {
     }
     setIsDrawerOpen(false);
   }
-  let user = [];
-  if (selectedPrefecture) {
-    user = dummyUsers.filter(dummyData => dummyData.key === selectedPrefecture)[0]["value"];
+  const onSubmitSearch = (userName: string) => {
+    searchType = "userName";
+    setSearchUserName(userName);
+    setIsDrawerOpen(true);
+  }
+  console.log(searchType)
+  if (selectedPrefecture && searchType === "prefecture") {
+    user = dummyUsers.filter(dummyData => dummyData.prefecture === selectedPrefecture);
+    drawerHeader = selectedPrefecture
+  } else if (searchUserName && searchType === "userName") {
+    user = dummyUsers.filter(dummyData => dummyData.name === searchUserName);
+    drawerHeader = "検索結果"
   }
 
   return (
     <>
       <div className="min-h-screen bg-[#222222] text-center">
         <ul className="flex justify-end gap-3.5 py-4 px-3">
+          <li className="float-left">
+            <Search
+              searchUser={onSubmitSearch}
+              className="top-0 px-0"
+            />
+          </li>
           <li>
             <Link href="/signup">
               <a className="rounded border border-gray-300 px-3 py-2.5 font-bold text-gray-300">
@@ -95,7 +116,7 @@ const Index: React.VFC = () => {
           blocking={false}
           header={
             <span className="mt-1 block w-full rounded bg-[#fe133c] py-1 font-bold text-white">
-              {selectedPrefecture}
+              {drawerHeader}
             </span>
           }
           snapPoints={({ maxHeight }) => [maxHeight * 0.4, maxHeight * 0.9]}
