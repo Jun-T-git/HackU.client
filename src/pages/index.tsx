@@ -36,17 +36,15 @@ const edges: Edge[] = [
   { nodes: ["高知県", "愛媛県"], color: OFFLINE_COLOR },
   { nodes: ["兵庫県", "長野県"], color: OFFLINE_COLOR },
 ];
-let searchType = "";
-let drawerHeader = "";
-let user = [];
 
 const Index: React.VFC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
   const [searchUserName, setSearchUserName] = useState<string>("");
+  const [searchType, setSearchType] = useState<string>("");
 
   const onClickPrefecture = (prefecture: string) => {
-    searchType = "prefecture";
+    setSearchType("prefecture");
     setSelectedPrefecture(prefecture);
     setIsDrawerOpen(true);
   };
@@ -57,37 +55,40 @@ const Index: React.VFC = () => {
     setIsDrawerOpen(false);
   }
   const onSubmitSearch = (userName: string) => {
-    searchType = "userName";
+    setSearchType("userName");
     setSearchUserName(userName);
     setIsDrawerOpen(true);
   }
   console.log(searchType)
+  
+  let users = []
+  let drawerHeader = ""
   if (selectedPrefecture && searchType === "prefecture") {
-    user = dummyUsers.filter(dummyData => dummyData.prefecture === selectedPrefecture);
-    drawerHeader = selectedPrefecture
+    users = dummyUsers.filter(dummyData => dummyData.prefecture === selectedPrefecture);
+    drawerHeader = selectedPrefecture;
+    console.log(users);
   } else if (searchUserName && searchType === "userName") {
-    user = dummyUsers.filter(dummyData => dummyData.name === searchUserName);
-    drawerHeader = "検索結果"
+    users = dummyUsers.filter(dummyData => dummyData.name === searchUserName);
+    drawerHeader = "検索結果";
   }
-
   return (
     <>
       <div className="min-h-screen bg-[#222222] text-center">
-        <ul className="flex justify-end gap-3.5 py-4 px-3">
-          <li className="float-left">
+        <ul className="flex justify-end gap-3.5 px-3">
+          <li className="float-left py-0">
             <Search
               searchUser={onSubmitSearch}
-              className="top-0 px-0"
+              className="my-0 py-0"
             />
           </li>
-          <li>
+          <li className="py-4">
             <Link href="/signup">
               <a className="rounded border border-gray-300 px-3 py-2.5 font-bold text-gray-300">
                 新規登録
               </a>
             </Link>
           </li>
-          <li>
+          <li className="py-4">
             <Link href="/signin">
               <a className="rounded border border-gray-300 px-3 py-2.5 font-bold text-gray-300">
                 ログイン
@@ -124,7 +125,7 @@ const Index: React.VFC = () => {
           <ul className="flex flex-col py-3 px-5 text-center">
               <List
                 listId="user"
-                users={user}
+                users={users}
                 onClickConnect={(name) => onClickConnect(name)}
               />
           </ul>

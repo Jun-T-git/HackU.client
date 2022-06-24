@@ -1,6 +1,4 @@
 import React, { ComponentPropsWithoutRef } from "react";
-import TextField from "~/components/field/textField";
-import Button from "~/components/button/button";
 
 type Props = {
   searchUser: (userName: (string)) => void
@@ -20,18 +18,12 @@ const Search: React.VFC<Props> = ({
                 return e.preventDefault();
                 }}
       >
-      <TextField
-        fieldId="search"
-        label="name"
-        className="p-1"
+      <input
+        id={"text-search"}
+        placeholder="名前を入力して検索"
+        className="min-h-[32px] w-full appearance-none rounded border bg-[#eeeeee] px-1 py-2 text-base font-normal text-[#222222]"
         onChange={(e) => handleChange(e)} 
       />
-      <Button
-        className="bg-transparent my-5 rounded border border-gray-300 px-3 py-2.5 font-bold text-gray-300"
-        type="submit"
-      >
-        検索
-      </Button>
     </form>
   );
 };
