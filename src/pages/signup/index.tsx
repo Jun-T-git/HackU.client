@@ -35,6 +35,7 @@ const Index: React.VFC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [prefectureId, setPrefectureId] = useState<number>(undefined);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -44,20 +45,24 @@ const Index: React.VFC = () => {
       userName: name,
       prefectureId: prefectureId,
     };
-    const res = await signUp(params);
-    console.log("Submit", res);
-    // router.push("/");
+    const { status } = await signUp(params);
+    if (status == 400) {
+      setErrorMessage("※登録済みのメールアドレスです");
+      return;
+    }
+    setErrorMessage("");
+    router.push("/");
   };
 
   return (
     <>
       <div className="inset-0 min-h-screen bg-gradient-to-b from-[#404040] via-[#444444] to-[#333333] px-2 py-5 drop-shadow-lg">
-        <div className="rounded-lg bg-white py-10">
+        <div className="mx-auto max-w-xl rounded-lg bg-white py-10">
           <h1 className="mb-10 text-center text-2xl font-bold text-red-500">
             新規登録
           </h1>
           <form onSubmit={onSubmit} className="mx-auto max-w-3xl px-2">
-            <div className="my-5 flex flex-col gap-y-5">
+            <div className="my-5 mx-auto flex max-w-lg flex-col gap-y-5">
               <TextField
                 fieldId="name"
                 label="名前"
@@ -94,6 +99,9 @@ const Index: React.VFC = () => {
                 onChange={(e) => setPrefectureId(Number(e.target.value))}
                 required={true}
               />
+              <span className="text-sm font-bold text-red-500">
+                {errorMessage}
+              </span>
             </div>
             <div className="mt-10 flex justify-center gap-x-5">
               <Button

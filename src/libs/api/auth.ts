@@ -1,4 +1,4 @@
-import { axios, handleError } from "./config";
+import { axios } from "./config";
 
 export type SignUpParams = {
   userId: string;
@@ -7,15 +7,8 @@ export type SignUpParams = {
 };
 
 export const signUp = async (params: SignUpParams) => {
-  const res = await axios
-    .post("/api/signup", params)
-    .catch((e) => {
-      throw Error(e);
-    })
-    .then(handleError)
-    .then((res) => res.json());
-  console.log(res);
-  return res;
+  const res = await axios.post("/api/signup", JSON.stringify(params));
+  return res.data;
 };
 
 export type SignInParams = {
@@ -23,13 +16,6 @@ export type SignInParams = {
 };
 
 export const signIn = async (params: SignInParams) => {
-  const res = await axios
-    .post("/api/signin", params)
-    .catch((e) => {
-      throw Error(e);
-    })
-    .then(handleError)
-    .then((res) => res.json());
-  console.log(res);
-  return res;
+  const res = await axios.post("/api/signin", JSON.stringify(params));
+  return res.data;
 };
