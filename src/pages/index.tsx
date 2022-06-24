@@ -7,6 +7,7 @@ import JapanMap from "~/components/japanMap";
 import Drawer from "~/components/dialog/drawer";
 import List from "~/components/list/list";
 import Search from "~/components/search/search";
+import Modal from "~/components/modal/modal";
 import "react-spring-bottom-sheet/dist/style.css";
 import { useRecoilValue } from "recoil";
 import { userState } from "~/libs/recoil/user";
@@ -30,11 +31,27 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
   const [displayedUsers, setDisplayedUsers] = useState<User[]>([]);
   const [drawerHeader, setDrawerHeader] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [connectToUser, setConnectToUser] = useState<object>({toUserId: "", toUserName: ""});
 
   if (!usersByPrefecture || !geo) {
     return <>Loading</>;
   }
+  const connectRadioValue = [
+    {id: 1, item: "オンライン", value: "onLine"},
+    {id: 2, item: "オフライン", value: "offLine"},
+  ];
 
+  const setModalState = (modalState: boolean) => {
+    setIsOpen(modalState);
+  }
+  const connectUser = (connectUserName: string, connectValue: string) => {
+    //つながる処理を記述
+    alert(connectUserName+"と"+connectValue+"でつながりました。");
+    const connectState = connectRadioValue.filter(dummyData => dummyData.item === connectValue)[0].value;
+    console.log(connectUserName, connectState)
+    setModalState(false);
+  }
   const onClickPrefecture = async (prefecture: string, users: User[]) => {
     setSelectedPrefecture(prefecture);
     setDisplayedUsers(users);
@@ -48,10 +65,11 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
     setDrawerHeader(`「${keyword}」の検索結果`);
     setIsDrawerOpen(true);
   };
-
-  const onClickConnect = (toUser: string) => {
-    if (toUser !== "") {
-      alert(toUser + "とつながりますか？");
+  const onClickConnect = (toUserId: string, toUserName: string) => {
+    if (toUserName !== "") {
+      const toUser = {toUserId: toUserId, toUserName: toUserName};
+      setConnectToUser(toUser);
+      setModalState(true);
     }
     setIsDrawerOpen(false);
   };
@@ -133,7 +151,7 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
               /* ログイン時 */
               <List
                 users={displayedUsers}
-                onClickConnect={(name) => onClickConnect(name)}
+                onClickConnect={(id, name) => onClickConnect(id, name)}
               />
             ) : (
               /* ログアウト時 */

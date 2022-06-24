@@ -3,9 +3,9 @@ import Button from "~/components/button/button";
 import { getPrefectureNameById } from "~/libs/functions/prefecture";
 import { User } from "~/types/user";
 
-type Props = User & { onClickConnect: (toUser: string) => void };
+type Props = User & { onClickConnect: (toUserId: (string), toUser: (string)) => void };
 
-const Card: React.VFC<Props> = ({ userName, prefectureId, onClickConnect }) => {
+const Card: React.VFC<Props> = ({ userId, userName, prefectureId, onClickConnect }) => {
   return (
     <div className="grid grid-cols-3 items-center overflow-hidden border-b border-gray-400 bg-white py-3 px-3 text-center">
       <span className="justify-self-start font-bold">{userName}</span>
@@ -16,7 +16,7 @@ const Card: React.VFC<Props> = ({ userName, prefectureId, onClickConnect }) => {
         styleType="outlined"
         className="max-w-[100px] justify-self-end text-sm"
         onClick={() => {
-          userName && onClickConnect(userName);
+          userId && userName && onClickConnect(userId, userName);;
         }}
       >
         つながる
