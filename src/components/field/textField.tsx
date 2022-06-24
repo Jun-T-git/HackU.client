@@ -1,5 +1,5 @@
 import React, { ComponentPropsWithoutRef } from "react";
-import Chip from "../chip";
+import Chip from "~/components/chip";
 
 type Props = {
   fieldId: string;

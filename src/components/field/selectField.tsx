@@ -1,6 +1,5 @@
 import React, { ComponentPropsWithoutRef } from "react";
-import Image from "next/image";
-import Chip from "../chip";
+import Chip from "~/components/chip";
 
 type Props = {
   fieldId: string;
