@@ -1,11 +1,5 @@
 import { atom } from "recoil";
-
-export type User = {
-  userId: string;
-  userName: string;
-  prefectureId: number;
-  point: number;
-};
+import { User } from "~/types/user";
 
 const defaultUser: User = {
   userId: null,

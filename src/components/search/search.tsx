@@ -1,7 +1,7 @@
 import React, { ComponentPropsWithoutRef } from "react";
 
 type Props = {
-  searchUser: (userName: string) => void;
+  searchUser: (userName: string) => Promise<void>;
   className: string;
 } & ComponentPropsWithoutRef<"form">;
 let userName = "";
@@ -16,9 +16,12 @@ const Search: React.VFC<Props> = ({ searchUser, className }) => {
         "flex overflow-hidden rounded border-gray-400 py-2 text-center shadow-lg " +
         className
       }
-      onSubmit={(e) => {
-        userName && searchUser(userName);
-        return e.preventDefault();
+      onSubmit={async (e) => {
+        e.preventDefault();
+        if (userName) {
+          await searchUser(userName);
+        }
+        return;
       }}
     >
       <input
