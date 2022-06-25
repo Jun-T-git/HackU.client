@@ -1,8 +1,8 @@
-import React, { Fragment, useState, ComponentPropsWithoutRef } from "react"
+import React, { Fragment, ComponentPropsWithoutRef } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 
 type Props = {
-  userName: string;
+  modalText: string;
   isOpen: boolean;
   setIsOpen: (isOpen: (boolean)) => void
   connectRadioValue: {
@@ -10,40 +10,21 @@ type Props = {
     item: string,
     value: string,
   }[];
-  onClickConnect: (connectUserName: (string), connectState: (string)) => void
+  RadioItems: JSX.Element[]
+  buttons: JSX.Element
 } & ComponentPropsWithoutRef<"form">;
 
-const MyModal: React.VFC<Props> = ({
-  userName,
+const Modal: React.VFC<Props> = ({
+  modalText,
   isOpen,
-  connectRadioValue,
+  RadioItems,
   setIsOpen,
-  onClickConnect
+  buttons,
 }) => {
 
   function closeModal() {
     setIsOpen(false)
   }
-
-  const [checkedValue, setCheckedValue] = useState(connectRadioValue[0]["item"]);
-  const handleChangeRadio = (e) => setCheckedValue(e.target.value);
-  const RadioItems = 
-  connectRadioValue.map((value, index) => {
-    return (
-      
-      <li key={index} className="m-5 list-none">
-        <label>
-          <input
-            type='radio'
-            value={value.item}
-            onChange={handleChangeRadio}
-            checked={checkedValue === value.item}
-          />
-          {value.item}
-        </label>
-      </li>
-    );
-  });
   
   return (
     <>
@@ -77,27 +58,13 @@ const MyModal: React.VFC<Props> = ({
                     as="span"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    {userName}とつながりますか？
+                    {modalText}
                   </Dialog.Title>
                   <div className="mt-2">
                     {RadioItems}
                   </div>
-
-                  <div className="mt-4">
-                    <button
-                      type="button"
-                      className="m-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={() => {userName && checkedValue && onClickConnect(userName, checkedValue);}}
-                    >
-                      OK
-                    </button>
-                    <button
-                      type="button"
-                      className="m-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
-                    >
-                      Cancel
-                    </button>
+                  <div className="mt-4 grid grid-cols-2">
+                    {buttons}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -108,4 +75,4 @@ const MyModal: React.VFC<Props> = ({
     </>
   )
 }
-export default MyModal;
+export default Modal;

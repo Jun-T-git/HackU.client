@@ -38,18 +38,62 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
     return <>Loading</>;
   }
   const connectRadioValue = [
-    {id: 1, item: "オンライン", value: "onLine"},
-    {id: 2, item: "オフライン", value: "offLine"},
+    {id: 1, item: "会って話した", value: "onLine"},
+    {id: 2, item: "オフラインで話した", value: "offLine"},
   ];
+
+  const [checkedValue, setCheckedValue] = useState(connectRadioValue[0]["item"]);
+  const handleChangeRadio = (e) => setCheckedValue(e.target.value);
+  function closeModal() {
+    setIsOpen(false)
+  }
+  const RadioItems = 
+  connectRadioValue.map((value, index) => {
+    return (
+      
+      <li key={index} className="m-5 list-none">
+        <label>
+          <input
+            type='radio'
+            value={value.item}
+            onChange={handleChangeRadio}
+            checked={checkedValue === value.item}
+          />
+          {value.item}
+        </label>
+      </li>
+    );
+  });
+
+  const buttons = ((connectUser, closeModal) => { return (
+    <div>
+      <button
+        type="button"
+        className="m-2 inline-flex justify-center rounded px-1 py-1.5 font-bold text-red-500 border-2 border-red-500 hover:opacity-50 w-[40%]"
+        onClick={closeModal}
+      >
+        キャンセル
+      </button>
+      <button
+        type="button"
+        className="m-2 inline-flex justify-center rounded px-1 py-1.5 font-bold bg-red-500 text-white hover:opacity-50 w-[40%]"
+        onClick={connectUser}
+      >
+        確定
+      </button>
+    </div>
+  );
+  });
+  const modalText = (connectToUser["toUserName"]+"とのつながりを記録しますか？");
 
   const setModalState = (modalState: boolean) => {
     setIsOpen(modalState);
   }
-  const connectUser = (connectUserName: string, connectValue: string) => {
+  const connectUser = () => {
     //つながる処理を記述
-    alert(connectUserName+"と"+connectValue+"でつながりました。");
-    const connectState = connectRadioValue.filter(dummyData => dummyData.item === connectValue)[0].value;
-    console.log(connectUserName, connectState)
+    alert(connectToUser["toUserName"]+"とのつながりをきろくしました。");
+    const connectState = connectRadioValue.filter(dummyData => dummyData.item === checkedValue)[0].value;
+    console.log(connectToUser["toUserName"], connectState)
     setModalState(false);
   }
   const onClickPrefecture = async (prefecture: string, users: User[]) => {
