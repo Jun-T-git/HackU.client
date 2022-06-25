@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import JapanMap, { Edge } from "~/components/japanMap";
 import Drawer from "~/components/dialog/drawer";
@@ -7,6 +8,9 @@ import List from "~/components/list/list";
 import Search from "~/components/search/search";
 import { dummyUsers } from "~/ts/dummy";
 import "react-spring-bottom-sheet/dist/style.css";
+import { useRecoilState } from "recoil";
+import { userState } from "~/libs/recoil/user";
+import DropDown from "~/components/menu/dropdown";
 
 const OFFLINE_COLOR = "#ff000020";
 const ONLINE_COLOR = "#00ff0020";
@@ -38,6 +42,7 @@ const edges: Edge[] = [
 ];
 
 const Index: React.VFC = () => {
+  const [signedInUser, setSignedInUser] = useRecoilState(userState);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
   const [searchUserName, setSearchUserName] = useState<string>("");
@@ -50,52 +55,61 @@ const Index: React.VFC = () => {
   };
   const onClickConnect = (toUser: string) => {
     if (toUser !== "") {
-      alert(toUser+"とつながりますか？");
+      alert(toUser + "とつながりますか？");
     }
     setIsDrawerOpen(false);
-  }
+  };
   const onSubmitSearch = (userName: string) => {
     setSearchType("userName");
     setSearchUserName(userName);
     setIsDrawerOpen(true);
-  }
-  console.log(searchType)
-  
-  let users = []
-  let drawerHeader = ""
+  };
+  console.log(searchType);
+
+  let users = [];
+  let drawerHeader = "";
   if (selectedPrefecture && searchType === "prefecture") {
-    users = dummyUsers.filter(dummyData => dummyData.prefecture === selectedPrefecture);
+    users = dummyUsers.filter(
+      (dummyData) => dummyData.prefecture === selectedPrefecture
+    );
     drawerHeader = selectedPrefecture;
     console.log(users);
   } else if (searchUserName && searchType === "userName") {
-    users = dummyUsers.filter(dummyData => dummyData.name === searchUserName);
+    users = dummyUsers.filter((dummyData) => dummyData.name === searchUserName);
     drawerHeader = "検索結果";
   }
   return (
     <>
       <div className="min-h-screen bg-[#222222] text-center">
-        <ul className="flex justify-end gap-3.5 px-3">
-          <li className="float-left py-0">
-            <Search
-              searchUser={onSubmitSearch}
-              className="my-0 py-0"
-            />
-          </li>
-          <li className="py-4">
-            <Link href="/signup">
-              <a className="rounded border border-gray-300 px-3 py-2.5 font-bold text-gray-300">
-                新規登録
-              </a>
-            </Link>
-          </li>
-          <li className="py-4">
-            <Link href="/signin">
-              <a className="rounded border border-gray-300 px-3 py-2.5 font-bold text-gray-300">
-                ログイン
-              </a>
-            </Link>
-          </li>
-        </ul>
+        <div className="px-3 py-3">
+          {signedInUser.userId ? (
+            // ログイン時
+            <div className="flex items-center gap-3.5">
+              <Search searchUser={onSubmitSearch} className="flex-grow" />
+              <DropDown>
+                <Image
+                  src="/image/hamburger-menu.svg"
+                  width="28px"
+                  height="28px"
+                />
+              </DropDown>
+            </div>
+          ) : (
+            // ログアウト時
+            <div className="flex justify-end gap-3.5">
+              <Link href="/signup">
+                <a className="rounded border border-[#dddddd] px-3 py-2.5 font-bold text-[#dddddd]">
+                  新規登録
+                </a>
+              </Link>
+              <Link href="/signin">
+                <a className="rounded border border-[#dddddd] px-3 py-2.5 font-bold text-[#dddddd]">
+                  ログイン
+                </a>
+              </Link>
+            </div>
+          )}
+        </div>
 
         <div className="flex justify-center py-5">
           <TransformWrapper wheel={{ step: 0.05 }}>
@@ -123,11 +137,31 @@ const Index: React.VFC = () => {
           snapPoints={({ maxHeight }) => [maxHeight * 0.4, maxHeight * 0.9]}
         >
           <ul className="flex flex-col py-3 px-5 text-center">
+            {signedInUser.userId ? (
               <List
                 listId="user"
                 users={users}
                 onClickConnect={(name) => onClickConnect(name)}
               />
+            ) : (
+              <div className="flex flex-col items-center gap-y-3 py-3">
+                <span className="text-[#222222 text-sm">
+                  ユーザー情報の閲覧はログイン中の方にのみご利用いただけます
+                </span>
+                <div className="flex w-full justify-center gap-3.5">
+                  <Link href="/signup">
+                    <a className="flex-grow rounded border border-red-500 py-2.5 font-bold text-red-500">
+                      新規登録
+                    </a>
+                  </Link>
+                  <Link href="/signin">
+                    <a className="flex-grow rounded border border-red-500 py-2.5 font-bold text-red-500">
+                      ログイン
+                    </a>
+                  </Link>
+                </div>
+              </div>
+            )}
           </ul>
         </Drawer>
       </div>

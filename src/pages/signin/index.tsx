@@ -4,8 +4,12 @@ import Link from "next/link";
 import Button from "~/components/button/button";
 import TextField from "~/components/field/textField";
 import { signIn } from "~/libs/api/auth";
+import { useSetRecoilState } from "recoil";
+import { userState } from "~/libs/recoil/user";
+import { searchUsers } from "~/libs/api/user";
 
 const Index: React.VFC = () => {
+  const setUser = useSetRecoilState(userState);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -13,15 +17,26 @@ const Index: React.VFC = () => {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const params = {
+    // サインイン
+    const signInParams = {
       userId: email,
     };
-    const { status } = await signIn(params);
+    const { status } = await signIn(signInParams);
     if (status == 400) {
       setErrorMessage("※メールアドレスまたはパスワードが間違っています");
       return;
     }
     setErrorMessage("");
+    // ユーザ情報をグローバルstateに格納
+    const searchUsersParams = {
+      userIdKey: email,
+    };
+    const { users } = await searchUsers(searchUsersParams);
+    console.log(users[0]);
+    if (users.length > 0) {
+      setUser(users[0]);
+    }
+    // 日本地図ページに遷移
     router.push("/");
   };
 
@@ -41,7 +56,7 @@ const Index: React.VFC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required={true}
-                type="email"
+                // type="email" ダミーデータに対応できないためコメントアウト
               />
               <TextField
                 fieldId="password"
