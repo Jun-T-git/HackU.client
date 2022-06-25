@@ -7,12 +7,14 @@ export type User = {
   point: number;
 };
 
+const defaultUser: User = {
+  userId: null,
+  userName: null,
+  prefectureId: null,
+  point: null,
+};
+
 export const userState = atom<User>({
   key: "userState",
-  default: {
-    userId: null,
-    userName: null,
-    prefectureId: null,
-    point: null,
-  },
+  default: defaultUser,
 });

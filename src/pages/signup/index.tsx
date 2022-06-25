@@ -37,7 +37,7 @@ const Index: React.VFC = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [prefectureId, setPrefectureId] = useState<number>(undefined);
+  const [prefectureId, setPrefectureId] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
 

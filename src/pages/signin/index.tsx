@@ -6,7 +6,7 @@ import TextField from "~/components/field/textField";
 import { signIn } from "~/libs/api/auth";
 import { useSetRecoilState } from "recoil";
 import { userState } from "~/libs/recoil/user";
-import { searchUsers } from "~/libs/api/user";
+import { fetchUser } from "~/libs/api/user";
 
 const Index: React.VFC = () => {
   const setUser = useSetRecoilState(userState);
@@ -28,11 +28,10 @@ const Index: React.VFC = () => {
     }
     setErrorMessage("");
     // ユーザ情報をグローバルstateに格納
-    const searchUsersParams = {
+    const fetchUserParams = {
       userIdKey: email,
     };
-    const { users } = await searchUsers(searchUsersParams);
-    console.log(users[0]);
+    const { users } = await fetchUser(fetchUserParams);
     if (users.length > 0) {
       setUser(users[0]);
     }
@@ -56,7 +55,7 @@ const Index: React.VFC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required={true}
-                // type="email" ダミーデータに対応できないためコメントアウト
+                /* type="email" ダミーデータに対応できないためコメントアウト */
               />
               <TextField
                 fieldId="password"

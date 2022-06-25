@@ -8,7 +8,7 @@ import List from "~/components/list/list";
 import Search from "~/components/search/search";
 import { dummyUsers } from "~/ts/dummy";
 import "react-spring-bottom-sheet/dist/style.css";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userState } from "~/libs/recoil/user";
 import DropDown from "~/components/menu/dropdown";
 
@@ -42,7 +42,7 @@ const edges: Edge[] = [
 ];
 
 const Index: React.VFC = () => {
-  const [signedInUser, setSignedInUser] = useRecoilState(userState);
+  const signedInUser = useRecoilValue(userState);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
   const [searchUserName, setSearchUserName] = useState<string>("");
@@ -83,7 +83,7 @@ const Index: React.VFC = () => {
       <div className="min-h-screen bg-[#222222] text-center">
         <div className="px-3 py-3">
           {signedInUser.userId ? (
-            // ログイン時
+            /* ログイン時 */
             <div className="flex items-center gap-3.5">
               <Search searchUser={onSubmitSearch} className="flex-grow" />
               <DropDown>
@@ -95,7 +95,7 @@ const Index: React.VFC = () => {
               </DropDown>
             </div>
           ) : (
-            // ログアウト時
+            /* ログアウト時 */
             <div className="flex justify-end gap-3.5">
               <Link href="/signup">
                 <a className="rounded border border-[#dddddd] px-3 py-2.5 font-bold text-[#dddddd]">
@@ -138,12 +138,14 @@ const Index: React.VFC = () => {
         >
           <ul className="flex flex-col py-3 px-5 text-center">
             {signedInUser.userId ? (
+              /* ログイン時 */
               <List
                 listId="user"
                 users={users}
                 onClickConnect={(name) => onClickConnect(name)}
               />
             ) : (
+              /* ログアウト時 */
               <div className="flex flex-col items-center gap-y-3 py-3">
                 <span className="text-[#222222 text-sm">
                   ユーザー情報の閲覧はログイン中の方にのみご利用いただけます
