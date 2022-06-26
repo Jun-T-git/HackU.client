@@ -13,7 +13,7 @@ const DropDown: React.VFC<Props> = ({ children }) => {
   const router = useRouter();
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button>{children}</Menu.Button>
+      <Menu.Button className="flex">{children}</Menu.Button>
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"

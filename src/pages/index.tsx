@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -10,9 +11,10 @@ import "react-spring-bottom-sheet/dist/style.css";
 import { useRecoilValue } from "recoil";
 import { userState } from "~/libs/recoil/user";
 import DropDown from "~/components/menu/dropdown";
-import { User } from "~/types/user";
-import { fetchUsersByPrefecture, searchUsers } from "~/libs/api/user";
-import { getPrefectureIdByName } from "~/libs/functions/prefecture";
+import { User, UsersByPrefecture } from "~/types/user";
+import { Geo } from "~/types/geo";
+import { getUsersByPrefecture } from "~/libs/functions/users";
+import { getGeo } from "~/libs/functions/geo";
 
 const OFFLINE_COLOR = "#ff000020";
 const ONLINE_COLOR = "#00ff0020";
@@ -43,19 +45,33 @@ const edges: Edge[] = [
   { nodes: ["兵庫県", "長野県"], color: OFFLINE_COLOR },
 ];
 
-const Index: React.VFC = () => {
+type Props = {
+  usersByPrefecture: UsersByPrefecture;
+  geo: Geo;
+};
+
+const Index: NextPage<Props> = ({ usersByPrefecture, geo }) => {
   const signedInUser = useRecoilValue(userState);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
   const [displayedUsers, setDisplayedUsers] = useState<User[]>([]);
+  const [drawerHeader, setDrawerHeader] = useState<string>("");
 
-  const onClickPrefecture = async (prefecture: string) => {
+  if (!usersByPrefecture || !geo) {
+    return <>Loading</>;
+  }
+
+  const onClickPrefecture = async (prefecture: string, users: User[]) => {
     setSelectedPrefecture(prefecture);
-    const prefectureId = getPrefectureIdByName(prefecture);
-    const { users } = await fetchUsersByPrefecture({
-      prefectureId: prefectureId,
-    });
     setDisplayedUsers(users);
+    setDrawerHeader(prefecture);
+    setIsDrawerOpen(true);
+  };
+
+  const onSubmitSearch = (keyword: string, users: User[]) => {
+    setSelectedPrefecture("");
+    setDisplayedUsers(users);
+    setDrawerHeader(`「${keyword}」の検索結果`);
     setIsDrawerOpen(true);
   };
 
@@ -66,21 +82,18 @@ const Index: React.VFC = () => {
     setIsDrawerOpen(false);
   };
 
-  const onSubmitSearch = async (userName: string) => {
-    const { users } = await searchUsers({ userNameKey: userName });
-    setDisplayedUsers(users);
-    setSelectedPrefecture("");
-    setIsDrawerOpen(true);
-  };
-
   return (
     <>
       <div className="min-h-screen bg-[#222222] text-center">
-        <div className="px-3 py-3">
+        <div className="fixed top-0 z-30 h-[70px] w-full px-3 py-3">
           {signedInUser.userId ? (
             /* ログイン時 */
             <div className="flex items-center gap-3.5">
-              <Search searchUser={onSubmitSearch} className="flex-grow" />
+              <Search
+                onSearch={onSubmitSearch}
+                allUsers={Object.values(usersByPrefecture).flat()}
+                className="flex-grow"
+              />
               <DropDown>
                 <Image
                   src="/image/hamburger-menu.svg"
@@ -106,7 +119,7 @@ const Index: React.VFC = () => {
           )}
         </div>
 
-        <div className="flex justify-center py-5">
+        <div className="flex justify-center py-5 pt-[70px]">
           <TransformWrapper wheel={{ step: 0.05 }}>
             <TransformComponent>
               <div className="min-h-[80vh] w-full">
@@ -114,6 +127,8 @@ const Index: React.VFC = () => {
                   edges={edges}
                   focusedPrefecture={selectedPrefecture}
                   onClickPrefecture={onClickPrefecture}
+                  usersByPrefecture={usersByPrefecture}
+                  geo={geo}
                 />
               </div>
             </TransformComponent>
@@ -126,7 +141,7 @@ const Index: React.VFC = () => {
           blocking={false}
           header={
             <span className="mt-1 block w-full rounded bg-red-500 py-1 font-bold text-white">
-              {selectedPrefecture ?? "検索結果"}
+              {drawerHeader}
             </span>
           }
           snapPoints={({ maxHeight }) => [maxHeight * 0.4, maxHeight * 0.9]}
@@ -163,6 +178,15 @@ const Index: React.VFC = () => {
       </div>
     </>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const usersByPrefecture = await getUsersByPrefecture();
+  const geo = getGeo();
+  return {
+    props: { usersByPrefecture, geo },
+    revalidate: 10,
+  };
 };
 
 export default Index;
