@@ -4,3 +4,7 @@ export type User = {
   prefectureId: number;
   point: number;
 };
+
+export type UsersByPrefecture = {
+  [prefectureName: string]: User[];
+};
