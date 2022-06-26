@@ -1,33 +1,23 @@
 import React from "react";
-import Button from "~/components/button/button" 
+import Button from "~/components/button/button";
+import { getPrefectureNameById } from "~/libs/functions/prefecture";
+import { User } from "~/types/user";
 
-export type User = {
-  id: number,
-  name: string,
-  prefecture: string,
-};
+type Props = User & { onClickConnect: (toUser: string) => void };
 
-type Props = 
-  User & {onClickConnect: (toUser: (string)) => void}
-
-
-const Card: React.VFC<Props> = ({
-  id,
-  name,
-  prefecture,
-  onClickConnect,
-}) => {
+const Card: React.VFC<Props> = ({ userName, prefectureId, onClickConnect }) => {
   return (
-    <div id={`card-${id}`} className="grid grid-cols-3 rounded overflow-hidden shadow-lg text-center bg-white border-b border-gray-400 py-2">
-      <span>
-        {name}
-      </span>
-      <span>
-        {prefecture}
+    <div className="grid grid-cols-3 items-center overflow-hidden border-b border-gray-400 bg-white py-3 px-3 text-center">
+      <span className="justify-self-start font-bold">{userName}</span>
+      <span className="justify-self-start text-sm">
+        {getPrefectureNameById(prefectureId)}
       </span>
       <Button
-        className="max-w-max bg-red-500"
-        onClick={() => {name && onClickConnect(name);}}
+        styleType="outlined"
+        className="max-w-[100px] justify-self-end text-sm"
+        onClick={() => {
+          userName && onClickConnect(userName);
+        }}
       >
         つながる
       </Button>

@@ -21,3 +21,14 @@ export const fetchUser = async (params: FetchUserParams) => {
   const res = await axios.post("/api/searchUserByUserIdExactly", params);
   return res.data;
 };
+
+type FetchUsersByPrefectureParams = {
+  prefectureId: number;
+};
+
+export const fetchUsersByPrefecture = async (
+  params: FetchUsersByPrefectureParams
+) => {
+  const res = await axios.post("/api/userByPrefecture", params);
+  return res.data;
+};
