@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import JapanMap from "~/components/japanMap";
+import Swal from "sweetalert2"
 import Drawer from "~/components/dialog/drawer";
 import List from "~/components/list/list";
 import Search from "~/components/search/search";
@@ -48,6 +49,15 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
   function closeModal() {
     setIsOpen(false)
   }
+  function cancelConnect () {
+    Swal.fire({
+      title: "つながりの記録をキャンセルしました",
+      icon: "info",
+      showConfirmButton: false,
+      timer: 1000
+    });
+    closeModal();
+  }
   const RadioItems = 
   connectRadioValue.map((value, index) => {
     return (
@@ -66,13 +76,13 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
     );
   });
 
-  const buttons = ((connectUser, closeModal) => { return (
+  const buttons = ((connectUser, cancelConnect) => { return (
     <div className="w-[100%]">
       <Button
         className="w-[40%]  m-2 inline-flex justify-center rounded px-1 py-1.5 hover:opacity-50"
         styleType="outlined"
         type="button"
-        onClick={closeModal}
+        onClick={cancelConnect}
       >
         キャンセル
       </Button>
@@ -93,7 +103,12 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
   }
   const connectUser = () => {
     //つながる処理を記述
-    alert(connectToUser["toUserName"]+"とのつながりをきろくしました。");
+    Swal.fire({
+      title: connectToUser["toUserName"]+"とのつながりを\n記録しました!",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1000
+    });
     const connectState = connectRadioValue.filter(dummyData => dummyData.item === checkedValue)[0].value;
     console.log(connectToUser["toUserName"], connectState)
     setModalState(false);
@@ -148,7 +163,7 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
                   {RadioItems}
                 </div>
                 <div className="mt-4">
-                  {buttons(connectUser, closeModal)}
+                  {buttons(connectUser, cancelConnect)}
                 </div>
               </Modal>
             </div>
