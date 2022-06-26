@@ -104,7 +104,7 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo }) => {
             </div>
           ) : (
             /* ログアウト時 */
-            <div className="flex justify-end gap-3.5">
+            <div className="flex items-center justify-end gap-3.5">
               <Link href="/signup">
                 <a className="rounded border border-[#dddddd] px-3 py-2.5 font-bold text-[#dddddd]">
                   新規登録
