@@ -33,7 +33,7 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
   const [displayedUsers, setDisplayedUsers] = useState<User[]>([]);
   const [drawerHeader, setDrawerHeader] = useState<string>("");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isConnectModalOpen, setIsConnectModalOpen] = useState<boolean>(false);
   const [connectToUser, setConnectToUser] = useState<object>({toUserId: "", toUserName: ""});
 
   if (!usersByPrefecture || !geo) {
@@ -47,7 +47,7 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
   const [checkedValue, setCheckedValue] = useState(connectRadioValue[0]["item"]);
   const handleChangeRadio = (e) => setCheckedValue(e.target.value);
   function closeModal() {
-    setIsOpen(false)
+    setIsConnectModalOpen(false)
   }
   function cancelConnect () {
     Swal.fire({
@@ -98,8 +98,8 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
   });
   const modalText = (connectToUser["toUserName"]+"とのつながりを記録しますか？");
 
-  const setModalState = (modalState: boolean) => {
-    setIsOpen(modalState);
+  const setConnecModalState = (modalState: boolean) => {
+    setIsConnectModalOpen(modalState);
   }
   const connectUser = () => {
     //つながる処理を記述
@@ -111,7 +111,7 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
     });
     const connectState = connectRadioValue.filter(dummyData => dummyData.item === checkedValue)[0].value;
     console.log(connectToUser["toUserName"], connectState)
-    setModalState(false);
+    setConnecModalState(false);
   }
   const onClickPrefecture = async (prefecture: string, users: User[]) => {
     setSelectedPrefecture(prefecture);
@@ -130,7 +130,7 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
     if (toUserName !== "") {
       const toUser = {toUserId: toUserId, toUserName: toUserName};
       setConnectToUser(toUser);
-      setModalState(true);
+      setConnecModalState(true);
     }
     setIsDrawerOpen(false);
   };
@@ -156,8 +156,8 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
               </DropDown>
               <Modal
                 modalText={modalText}
-                isOpen={isOpen}
-                setIsOpen={(modalState) => {setModalState(modalState);}}
+                isOpen={isConnectModalOpen}
+                setIsOpen={(modalState) => {setConnecModalState(modalState);}}
               >
                 <div className="mt-2">
                   {RadioItems}
