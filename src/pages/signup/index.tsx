@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { FormEvent, useState } from "react";
+import { useSetRecoilState } from "recoil";
 import Button from "~/components/button/button";
 import SelectField from "~/components/field/selectField";
 import TextField from "~/components/field/textField";
 import { signUp } from "~/libs/api/auth";
 import { prefectures } from "~/libs/constants/prefectures";
 import { textValidation } from "~/libs/functions/validation";
+import { userState } from "~/libs/recoil/user";
 
 // todo: 余裕があればValidation実装
 // // validation rule
@@ -31,15 +33,17 @@ import { textValidation } from "~/libs/functions/validation";
 // };
 
 const Index: React.VFC = () => {
+  const setUser = useSetRecoilState(userState);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [prefectureId, setPrefectureId] = useState<number>(undefined);
+  const [prefectureId, setPrefectureId] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // サインアップ
     const params = {
       userId: email,
       userName: name,
@@ -51,6 +55,9 @@ const Index: React.VFC = () => {
       return;
     }
     setErrorMessage("");
+    // ユーザ情報をグローバルstateに格納
+    setUser({ ...params, point: 0 });
+    // 日本地図ページに遷移
     router.push("/");
   };
 

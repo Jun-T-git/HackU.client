@@ -1,3 +1,5 @@
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user";
 import { axios } from "./config";
 
 export type SignUpParams = {
