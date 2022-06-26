@@ -85,7 +85,7 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo }) => {
   return (
     <>
       <div className="min-h-screen bg-[#222222] text-center">
-        <div className="fixed top-0 z-30 h-[70px] w-full px-3 py-3">
+        <div className="fixed top-0 z-30 h-[70px] w-full px-2 py-3">
           {signedInUser.userId ? (
             /* ログイン時 */
             <div className="flex items-center gap-3.5">
@@ -104,17 +104,25 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo }) => {
             </div>
           ) : (
             /* ログアウト時 */
-            <div className="flex items-center justify-end gap-3.5">
-              <Link href="/signup">
-                <a className="rounded border border-[#dddddd] px-3 py-2.5 font-bold text-[#dddddd]">
-                  新規登録
-                </a>
-              </Link>
-              <Link href="/signin">
-                <a className="rounded border border-[#dddddd] px-3 py-2.5 font-bold text-[#dddddd]">
-                  ログイン
-                </a>
-              </Link>
+            <div className="flex items-center justify-between gap-3.5">
+              <Image
+                src="/logo/logo_light01.svg"
+                width="140px"
+                height="35px"
+                alt="COM.PY-logo"
+              />
+              <div className="flex items-center gap-3">
+                <Link href="/signup">
+                  <a className="rounded border border-[#dddddd] px-3 py-2.5 text-sm font-bold text-[#dddddd]">
+                    新規登録
+                  </a>
+                </Link>
+                <Link href="/signin">
+                  <a className="rounded border border-[#dddddd] px-3 py-2.5 text-sm font-bold text-[#dddddd]">
+                    ログイン
+                  </a>
+                </Link>
+              </div>
             </div>
           )}
         </div>

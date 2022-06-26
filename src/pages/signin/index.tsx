@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Image from "next/image";
 import Button from "~/components/button/button";
 import TextField from "~/components/field/textField";
 import { signIn } from "~/libs/api/auth";
@@ -43,9 +44,14 @@ const Index: React.VFC = () => {
     <>
       <div className="inset-0 min-h-screen bg-gradient-to-b from-[#404040] via-[#444444] to-[#333333] px-2 py-5 drop-shadow-lg">
         <div className="mx-auto max-w-xl rounded-lg bg-white py-10">
-          <h1 className="mb-10 text-center text-2xl font-bold text-red-500">
-            ログイン
-          </h1>
+          <div className="mx-auto mb-8 text-center">
+            <Image
+              src="/logo/logo_dark01.svg"
+              width="150px"
+              height="40px"
+              alt="COM.PY-logo"
+            />
+          </div>
           <form onSubmit={onSubmit} className="mx-auto max-w-3xl px-2">
             <div className="my-5 mx-auto flex max-w-lg flex-col gap-y-5">
               <TextField
@@ -70,7 +76,7 @@ const Index: React.VFC = () => {
                 {errorMessage}
               </span>
             </div>
-            <div className="mt-10 flex justify-center gap-x-5">
+            <div className="mt-7 flex justify-center gap-x-5">
               <Button
                 className="block w-[40%]"
                 styleType="outlined"
