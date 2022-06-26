@@ -3,7 +3,7 @@ import { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import JapanMap, { Edge } from "~/components/japanMap";
+import JapanMap from "~/components/japanMap";
 import Drawer from "~/components/dialog/drawer";
 import List from "~/components/list/list";
 import Search from "~/components/search/search";
@@ -15,42 +15,16 @@ import { User, UsersByPrefecture } from "~/types/user";
 import { Geo } from "~/types/geo";
 import { getUsersByPrefecture } from "~/libs/functions/users";
 import { getGeo } from "~/libs/functions/geo";
-
-const OFFLINE_COLOR = "#ff000020";
-const ONLINE_COLOR = "#00ff0020";
-
-const edges: Edge[] = [
-  { nodes: ["広島県", "東京都"], color: ONLINE_COLOR },
-  { nodes: ["広島県", "大阪府"], color: ONLINE_COLOR },
-  { nodes: ["千葉県", "東京都"], color: ONLINE_COLOR },
-  { nodes: ["愛知県", "広島県"], color: ONLINE_COLOR },
-  { nodes: ["愛知県", "大阪府"], color: ONLINE_COLOR },
-  { nodes: ["北海道", "東京都"], color: ONLINE_COLOR },
-  { nodes: ["新潟県", "島根県"], color: ONLINE_COLOR },
-  { nodes: ["京都府", "沖縄県"], color: ONLINE_COLOR },
-  { nodes: ["大阪府", "広島県"], color: ONLINE_COLOR },
-  { nodes: ["大阪府", "広島県"], color: ONLINE_COLOR },
-  { nodes: ["青森県", "秋田県"], color: ONLINE_COLOR },
-  { nodes: ["岩手県", "佐賀県"], color: ONLINE_COLOR },
-  { nodes: ["東京都", "千葉県"], color: OFFLINE_COLOR },
-  { nodes: ["東京都", "神奈川県"], color: OFFLINE_COLOR },
-  { nodes: ["東京都", "神奈川県"], color: OFFLINE_COLOR },
-  { nodes: ["東京都", "神奈川県"], color: OFFLINE_COLOR },
-  { nodes: ["東京都", "神奈川県"], color: OFFLINE_COLOR },
-  { nodes: ["東京都", "大阪府"], color: OFFLINE_COLOR },
-  { nodes: ["東京都", "埼玉県"], color: OFFLINE_COLOR },
-  { nodes: ["広島県", "岡山県"], color: OFFLINE_COLOR },
-  { nodes: ["福岡県", "広島県"], color: OFFLINE_COLOR },
-  { nodes: ["高知県", "愛媛県"], color: OFFLINE_COLOR },
-  { nodes: ["兵庫県", "長野県"], color: OFFLINE_COLOR },
-];
+import { Edge } from "~/types/connection";
+import { getAllEdges } from "~/libs/functions/connection";
 
 type Props = {
   usersByPrefecture: UsersByPrefecture;
   geo: Geo;
+  allEdges: Edge[];
 };
 
-const Index: NextPage<Props> = ({ usersByPrefecture, geo }) => {
+const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
   const signedInUser = useRecoilValue(userState);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
@@ -132,7 +106,7 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo }) => {
             <TransformComponent>
               <div className="min-h-[80vh] w-full">
                 <JapanMap
-                  edges={edges}
+                  edges={allEdges}
                   focusedPrefecture={selectedPrefecture}
                   onClickPrefecture={onClickPrefecture}
                   usersByPrefecture={usersByPrefecture}
@@ -191,8 +165,9 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo }) => {
 export const getStaticProps: GetStaticProps = async () => {
   const usersByPrefecture = await getUsersByPrefecture();
   const geo = getGeo();
+  const allEdges = await getAllEdges();
   return {
-    props: { usersByPrefecture, geo },
+    props: { usersByPrefecture, geo, allEdges },
     revalidate: 10,
   };
 };

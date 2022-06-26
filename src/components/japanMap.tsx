@@ -1,11 +1,7 @@
 import React from "react";
+import { Edge } from "~/types/connection";
 import { Geo } from "~/types/geo";
 import { User, UsersByPrefecture } from "~/types/user";
-
-export type Edge = {
-  nodes: [string, string]; // [都道府県名, 都道府県名]
-  color: string;
-};
 
 type Props = {
   edges: Edge[];
@@ -17,8 +13,8 @@ type Props = {
 
 const WIDTH = 500;
 const HEIGHT = 500;
-const FILL_COLOR = "#333333";
-const STROKE_COLOR = "#282828";
+const FILL_COLOR = "#404040";
+const STROKE_COLOR = "#333333";
 const FOCUSED_COLOR = "#777777";
 
 const JapanMap: React.VFC<Props> = ({
