@@ -1,16 +1,12 @@
-import React, { Fragment, ComponentPropsWithoutRef } from "react"
+import React, { Fragment, ReactNode } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 
 type Props = {
   modalText: string;
   isOpen: boolean;
   setIsOpen: (isOpen: (boolean)) => void
-  connectRadioValue: {
-    id: number,
-    item: string,
-    value: string,
-  }[];
-} & ComponentPropsWithoutRef<"form">;
+  children: ReactNode;
+};
 
 const Modal: React.VFC<Props> = ({
   children,

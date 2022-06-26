@@ -142,7 +142,6 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
               <Modal
                 modalText={modalText}
                 isOpen={isOpen}
-                connectRadioValue={connectRadioValue}
                 setIsOpen={(modalState) => {setModalState(modalState);}}
               >
                 <div className="mt-2">
