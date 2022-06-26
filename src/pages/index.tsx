@@ -6,11 +6,13 @@ import JapanMap, { Edge } from "~/components/japanMap";
 import Drawer from "~/components/dialog/drawer";
 import List from "~/components/list/list";
 import Search from "~/components/search/search";
-import { dummyUsers } from "~/ts/dummy";
 import "react-spring-bottom-sheet/dist/style.css";
 import { useRecoilValue } from "recoil";
 import { userState } from "~/libs/recoil/user";
 import DropDown from "~/components/menu/dropdown";
+import { User } from "~/types/user";
+import { fetchUsersByPrefecture, searchUsers } from "~/libs/api/user";
+import { getPrefectureIdByName } from "~/libs/functions/prefecture";
 
 const OFFLINE_COLOR = "#ff000020";
 const ONLINE_COLOR = "#00ff0020";
@@ -45,39 +47,32 @@ const Index: React.VFC = () => {
   const signedInUser = useRecoilValue(userState);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
-  const [searchUserName, setSearchUserName] = useState<string>("");
-  const [searchType, setSearchType] = useState<string>("");
+  const [displayedUsers, setDisplayedUsers] = useState<User[]>([]);
 
-  const onClickPrefecture = (prefecture: string) => {
-    setSearchType("prefecture");
+  const onClickPrefecture = async (prefecture: string) => {
     setSelectedPrefecture(prefecture);
+    const prefectureId = getPrefectureIdByName(prefecture);
+    const { users } = await fetchUsersByPrefecture({
+      prefectureId: prefectureId,
+    });
+    setDisplayedUsers(users);
     setIsDrawerOpen(true);
   };
+
   const onClickConnect = (toUser: string) => {
     if (toUser !== "") {
       alert(toUser + "とつながりますか？");
     }
     setIsDrawerOpen(false);
   };
-  const onSubmitSearch = (userName: string) => {
-    setSearchType("userName");
-    setSearchUserName(userName);
+
+  const onSubmitSearch = async (userName: string) => {
+    const { users } = await searchUsers({ userNameKey: userName });
+    setDisplayedUsers(users);
+    setSelectedPrefecture("");
     setIsDrawerOpen(true);
   };
-  console.log(searchType);
 
-  let users = [];
-  let drawerHeader = "";
-  if (selectedPrefecture && searchType === "prefecture") {
-    users = dummyUsers.filter(
-      (dummyData) => dummyData.prefecture === selectedPrefecture
-    );
-    drawerHeader = selectedPrefecture;
-    console.log(users);
-  } else if (searchUserName && searchType === "userName") {
-    users = dummyUsers.filter((dummyData) => dummyData.name === searchUserName);
-    drawerHeader = "検索結果";
-  }
   return (
     <>
       <div className="min-h-screen bg-[#222222] text-center">
@@ -96,7 +91,7 @@ const Index: React.VFC = () => {
             </div>
           ) : (
             /* ログアウト時 */
-            <div className="flex justify-end gap-3.5">
+            <div className="flex items-center justify-end gap-3.5">
               <Link href="/signup">
                 <a className="rounded border border-[#dddddd] px-3 py-2.5 font-bold text-[#dddddd]">
                   新規登録
@@ -130,8 +125,8 @@ const Index: React.VFC = () => {
           onDismiss={() => setIsDrawerOpen(false)}
           blocking={false}
           header={
-            <span className="mt-1 block w-full rounded bg-[#fe133c] py-1 font-bold text-white">
-              {drawerHeader}
+            <span className="mt-1 block w-full rounded bg-red-500 py-1 font-bold text-white">
+              {selectedPrefecture ?? "検索結果"}
             </span>
           }
           snapPoints={({ maxHeight }) => [maxHeight * 0.4, maxHeight * 0.9]}
@@ -140,8 +135,7 @@ const Index: React.VFC = () => {
             {signedInUser.userId ? (
               /* ログイン時 */
               <List
-                listId="user"
-                users={users}
+                users={displayedUsers}
                 onClickConnect={(name) => onClickConnect(name)}
               />
             ) : (

@@ -7,6 +7,7 @@ import SelectField from "~/components/field/selectField";
 import TextField from "~/components/field/textField";
 import { signUp } from "~/libs/api/auth";
 import { prefectures } from "~/libs/constants/prefectures";
+import { getPrefectureIdByName } from "~/libs/functions/prefecture";
 import { textValidation } from "~/libs/functions/validation";
 import { userState } from "~/libs/recoil/user";
 
@@ -99,8 +100,11 @@ const Index: React.VFC = () => {
               <SelectField
                 fieldId="prefecture"
                 label="住んでいる都道府県"
-                options={prefectures.map((prefecture) => {
-                  return { name: prefecture.name, value: prefecture.id };
+                options={Object.keys(prefectures).map((prefectureName) => {
+                  return {
+                    name: prefectureName,
+                    value: getPrefectureIdByName(prefectureName),
+                  };
                 })}
                 value={prefectureId}
                 onChange={(e) => setPrefectureId(Number(e.target.value))}
