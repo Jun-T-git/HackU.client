@@ -10,16 +10,13 @@ type Props = {
     item: string,
     value: string,
   }[];
-  RadioItems: JSX.Element[]
-  buttons: JSX.Element
 } & ComponentPropsWithoutRef<"form">;
 
 const Modal: React.VFC<Props> = ({
+  children,
   modalText,
   isOpen,
-  RadioItems,
   setIsOpen,
-  buttons,
 }) => {
 
   function closeModal() {
@@ -60,12 +57,7 @@ const Modal: React.VFC<Props> = ({
                   >
                     {modalText}
                   </Dialog.Title>
-                  <div className="mt-2">
-                    {RadioItems}
-                  </div>
-                  <div className="mt-4 grid grid-cols-2">
-                    {buttons}
-                  </div>
+                    {children}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

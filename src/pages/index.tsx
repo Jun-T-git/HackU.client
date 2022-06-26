@@ -8,6 +8,7 @@ import Drawer from "~/components/dialog/drawer";
 import List from "~/components/list/list";
 import Search from "~/components/search/search";
 import Modal from "~/components/modal/modal";
+import Button from "~/components/button/button"
 import "react-spring-bottom-sheet/dist/style.css";
 import { useRecoilValue } from "recoil";
 import { userState } from "~/libs/recoil/user";
@@ -66,21 +67,22 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
   });
 
   const buttons = ((connectUser, closeModal) => { return (
-    <div>
-      <button
+    <div className="w-[100%]">
+      <Button
+        className="w-[40%]  m-2 inline-flex justify-center rounded px-1 py-1.5 hover:opacity-50"
+        styleType="outlined"
         type="button"
-        className="m-2 inline-flex justify-center rounded px-1 py-1.5 font-bold text-red-500 border-2 border-red-500 hover:opacity-50 w-[40%]"
         onClick={closeModal}
       >
         キャンセル
-      </button>
-      <button
+      </Button>
+      <Button
+        className="w-[40%] m-2 inline-flex justify-center rounded px-1 py-1.5 hover:opacity-50"
         type="button"
-        className="m-2 inline-flex justify-center rounded px-1 py-1.5 font-bold bg-red-500 text-white hover:opacity-50 w-[40%]"
         onClick={connectUser}
       >
         確定
-      </button>
+      </Button>
     </div>
   );
   });
@@ -137,6 +139,19 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
                   height="28px"
                 />
               </DropDown>
+              <Modal
+                modalText={modalText}
+                isOpen={isOpen}
+                connectRadioValue={connectRadioValue}
+                setIsOpen={(modalState) => {setModalState(modalState);}}
+              >
+                <div className="mt-2">
+                  {RadioItems}
+                </div>
+                <div className="mt-4">
+                  {buttons(connectUser, closeModal)}
+                </div>
+              </Modal>
             </div>
           ) : (
             /* ログアウト時 */
