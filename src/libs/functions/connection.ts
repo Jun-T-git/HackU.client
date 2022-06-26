@@ -16,8 +16,8 @@ export const connectionsToEdges = (
         continue;
       }
       const opacity0d = Math.min(
-        Math.floor(connections[row][col] * 255 + 16),
-        255
+        Math.floor((connections[row][col] * 255) / 2 + 32),
+        160
       );
       const opacity0x = ("0" + opacity0d.toString(16)).slice(-2);
       edges.push({
