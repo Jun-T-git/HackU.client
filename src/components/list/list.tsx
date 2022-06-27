@@ -4,7 +4,7 @@ import { User } from "~/types/user";
 
 type Props = {
   users: User[];
-  onClickConnect: (toUser: string) => void;
+  onClickConnect: (toUserId: string, toUser: string) => void;
 };
 
 const List: React.VFC<Props> = ({ users, onClickConnect }) => {
@@ -13,8 +13,8 @@ const List: React.VFC<Props> = ({ users, onClickConnect }) => {
       <li key={user.userId} className="m-0.5">
         <Card
           {...user}
-          onClickConnect={(name) => {
-            onClickConnect(name);
+          onClickConnect={(id, name) => {
+            onClickConnect(id, name);
           }}
         />
       </li>
