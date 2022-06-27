@@ -35,9 +35,9 @@ const Index: React.VFC = () => {
     const { users } = await fetchUser(fetchUserParams);
     if (users.length > 0) {
       setUser(users[0]);
+      // 日本地図ページに遷移
+      router.push(`/${users[0].userId}/map`);
     }
-    // 日本地図ページに遷移
-    router.push("/");
   };
 
   return (

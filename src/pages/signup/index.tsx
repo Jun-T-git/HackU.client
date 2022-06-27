@@ -60,7 +60,7 @@ const Index: React.VFC = () => {
     // ユーザ情報をグローバルstateに格納
     setUser({ ...params, point: 0 });
     // 日本地図ページに遷移
-    router.push("/");
+    router.push(`/${email}/map`);
   };
 
   return (
