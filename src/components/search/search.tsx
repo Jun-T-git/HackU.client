@@ -31,7 +31,7 @@ const Search: React.VFC<Props> = ({ onSearch, allUsers, className }) => {
       <input
         id={"text-search"}
         placeholder="名前を入力して検索"
-        className="min-h-[32px] w-full appearance-none rounded-full border bg-[#eeeeee] px-1 py-2 text-base font-normal text-[#222222]"
+        className="min-h-[32px] w-full appearance-none rounded-full border bg-[#eeeeee] px-3 py-2 text-base font-normal text-[#222222]"
         onChange={onChange}
       />
     </form>

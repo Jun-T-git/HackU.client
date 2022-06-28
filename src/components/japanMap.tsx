@@ -1,19 +1,22 @@
-import React from "react";
-import { Edge } from "~/types/connection";
+import React, { MouseEventHandler } from "react";
+import { Edge, PrefectureColors } from "~/types/connection";
 import { Geo } from "~/types/geo";
 import { User, UsersByPrefecture } from "~/types/user";
 
 type Props = {
   edges: Edge[];
   focusedPrefecture: string;
-  onClickPrefecture: (prefecture: string, users: User[]) => void;
+  onClickPrefecture: (prefecture: string, users?: User[]) => void;
+  onClickOutside: MouseEventHandler;
   usersByPrefecture: UsersByPrefecture;
   geo: Geo;
+  isEdgeVisible?: boolean;
+  prefectureColors?: PrefectureColors;
 };
 
 const WIDTH = 500;
 const HEIGHT = 500;
-const FILL_COLOR = "#404040";
+const FILL_COLOR_DEFAULT = "#404040";
 const STROKE_COLOR = "#333333";
 const FOCUSED_COLOR = "#aaaaaa";
 
@@ -21,14 +24,22 @@ const JapanMap: React.VFC<Props> = ({
   edges,
   focusedPrefecture,
   onClickPrefecture,
+  onClickOutside,
   usersByPrefecture,
   geo,
+  isEdgeVisible = true,
+  prefectureColors = {},
 }) => {
   return (
-    <svg width={WIDTH} height={HEIGHT}>
-      <g className="prefectures">
+    <svg width={WIDTH} height={HEIGHT} onClick={onClickOutside}>
+      <g>
         {Object.keys(geo)?.map((key, i) => {
           const prefecture = geo[key];
+          const filledColor = Object.keys(prefectureColors).includes(
+            prefecture.name
+          )
+            ? prefectureColors[prefecture.name]
+            : FILL_COLOR_DEFAULT;
           return (
             <path
               onClick={() => {
@@ -41,9 +52,9 @@ const JapanMap: React.VFC<Props> = ({
               key={`path-${i}`}
               d={prefecture.d}
               className="prefecture"
-              fill={FILL_COLOR}
               stroke={STROKE_COLOR}
               strokeWidth={0.5}
+              fill={filledColor}
             />
           );
         })}
@@ -58,12 +69,17 @@ const JapanMap: React.VFC<Props> = ({
             key="path-focused"
             d={geo[focusedPrefecture].d}
             className="prefecture"
-            fill={FILL_COLOR}
             stroke={FOCUSED_COLOR}
             strokeWidth={0.5}
+            fill={
+              Object.keys(prefectureColors).includes(focusedPrefecture)
+                ? prefectureColors[focusedPrefecture]
+                : FILL_COLOR_DEFAULT
+            }
           />
         )}
-        {Object.keys(geo).length &&
+        {isEdgeVisible &&
+          Object.keys(geo).length &&
           edges.map((edge, i) => {
             const centroid1 = geo[edge.nodes[0]].centroid;
             const centroid2 = geo[edge.nodes[1]].centroid;
