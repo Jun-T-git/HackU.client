@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { Edge, PrefectureColors } from "~/types/connection";
 import { Geo } from "~/types/geo";
 import { User, UsersByPrefecture } from "~/types/user";
@@ -7,6 +7,7 @@ type Props = {
   edges: Edge[];
   focusedPrefecture: string;
   onClickPrefecture: (prefecture: string, users?: User[]) => void;
+  onClickOutside: MouseEventHandler;
   usersByPrefecture: UsersByPrefecture;
   geo: Geo;
   isEdgeVisible?: boolean;
@@ -23,14 +24,15 @@ const JapanMap: React.VFC<Props> = ({
   edges,
   focusedPrefecture,
   onClickPrefecture,
+  onClickOutside,
   usersByPrefecture,
   geo,
   isEdgeVisible = true,
   prefectureColors = {},
 }) => {
   return (
-    <svg width={WIDTH} height={HEIGHT}>
-      <g className="prefectures">
+    <svg width={WIDTH} height={HEIGHT} onClick={onClickOutside}>
+      <g>
         {Object.keys(geo)?.map((key, i) => {
           const prefecture = geo[key];
           const filledColor = Object.keys(prefectureColors).includes(

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { MouseEventHandler, useEffect, useState } from "react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -141,11 +141,21 @@ const Index: NextPage<Props> = ({
     console.log(connectToUser["toUserName"], connectState);
     setConnecModalState(false);
   };
+
   const onClickPrefecture = async (prefecture: string, users: User[]) => {
     setSelectedPrefecture(prefecture);
     setDisplayedUsers(users);
     setDrawerHeader(prefecture);
     setIsDrawerOpen(true);
+  };
+
+  const onClickOutside: MouseEventHandler = (e) => {
+    if (e.target === e.currentTarget) {
+      setSelectedPrefecture("");
+      setDisplayedUsers([]);
+      setDrawerHeader("");
+      setIsDrawerOpen(false);
+    }
   };
 
   const onSubmitSearch = (keyword: string, users: User[]) => {
@@ -154,6 +164,7 @@ const Index: NextPage<Props> = ({
     setDrawerHeader(`「${keyword}」の検索結果`);
     setIsDrawerOpen(true);
   };
+
   const onClickConnect = (toUserId: string, toUserName: string) => {
     if (toUserName !== "") {
       const toUser = { toUserId: toUserId, toUserName: toUserName };
@@ -194,7 +205,7 @@ const Index: NextPage<Props> = ({
         </div>
 
         <div className="pt-[70px]">
-          <div className="flex justify-end px-2">
+          <div className="flex justify-end px-2 py-3">
             <button
               className={`flex items-center justify-center rounded border border-[#888888] p-2 ${
                 isEdgeVisible && "opacity-30"
@@ -214,6 +225,7 @@ const Index: NextPage<Props> = ({
                     edges={allEdges}
                     focusedPrefecture={selectedPrefecture}
                     onClickPrefecture={onClickPrefecture}
+                    onClickOutside={onClickOutside}
                     usersByPrefecture={usersByPrefecture}
                     geo={geo}
                     prefectureColors={prefectureColors}

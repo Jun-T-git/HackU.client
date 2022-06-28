@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { MouseEventHandler, useEffect, useState } from "react";
 import { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -40,6 +40,14 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
     setSelectedPrefecture(prefecture);
     setDrawerHeader(prefecture);
     setIsDrawerOpen(true);
+  };
+
+  const onClickOutside: MouseEventHandler = (e) => {
+    if (e.target === e.currentTarget) {
+      setSelectedPrefecture("");
+      setDrawerHeader("");
+      setIsDrawerOpen(false);
+    }
   };
 
   if (!isReady || !usersByPrefecture || !geo || signedInUser.userId) {
@@ -84,6 +92,7 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
                   edges={allEdges}
                   focusedPrefecture={selectedPrefecture}
                   onClickPrefecture={onClickPrefecture}
+                  onClickOutside={onClickOutside}
                   usersByPrefecture={usersByPrefecture}
                   geo={geo}
                 />
