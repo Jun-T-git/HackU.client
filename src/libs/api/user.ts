@@ -32,3 +32,8 @@ export const fetchUsersByPrefecture = async (
   const res = await axios.post("/api/userByPrefecture", params);
   return res.data;
 };
+
+export const rankedUsers = async () => {
+  const res = await axios.get("/api/ranking");
+  return res.data;
+}
