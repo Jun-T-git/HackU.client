@@ -19,3 +19,9 @@ export const getMapPaths = async (): Promise<string[]> => {
   const paths = users.map(({ userId }) => `/${userId}/map`);
   return paths;
 };
+
+export const getLogoPaths = async (): Promise<string[]> => {
+  const { users } = await searchUsers({});
+  const paths = users.map(({ userId }) => `/${userId}/logo`);
+  return paths;
+};

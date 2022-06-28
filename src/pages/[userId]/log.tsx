@@ -11,6 +11,7 @@ import { getConnectLogs } from "~/libs/functions/connection";
 import LogCard from "~/components/card/logCard";
 import DropDown from "~/components/menu/dropdown";
 import LogList from "~/components/list/logList";
+import { getLogoPaths } from "~/libs/functions/users";
 
 type Props = {
   connectLogs: ConnectLog[];
@@ -83,8 +84,8 @@ const Index: NextPage<Props> = ({ connectLogs }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  // const paths = await getMapPaths();
-  const paths = ["/id125/log"];
+  const paths = await getLogoPaths();
+  // const paths = ["/id125/log"];
   return {
     paths,
     fallback: true,

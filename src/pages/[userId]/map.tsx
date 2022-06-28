@@ -174,8 +174,8 @@ const Index: NextPage<Props> = ({
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  // const paths = await getMapPaths();
-  const paths = ["/id125/map"];
+  const paths = await getMapPaths();
+  // const paths = ["/id125/map"];
   return {
     paths,
     fallback: true,
