@@ -6,3 +6,11 @@ export type Edge = {
 export type PrefectureColors = {
   [name: string]: string; // 都道府県名：カラーコード
 };
+
+export type ConnectLog = {
+  userName: string;
+  prefectureName: string;
+  connectedAt: string;
+  status: string;
+  isFirst: boolean;
+};
