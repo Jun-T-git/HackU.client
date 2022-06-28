@@ -469,6 +469,69 @@ const dummyUsers = [
   { id: 468, name: "伊藤桜子", prefecture: "沖縄県" },
   { id: 469, name: "中村四郎", prefecture: "沖縄県" },
   { id: 470, name: "小林優子", prefecture: "沖縄県" }
-]
+];
 
-export { dummyUsers }
+const dummyRankedUsers = [
+  {
+    userId: "rank1@example.com",
+    userName: "山田太郎",
+    prefectureId: 4,
+    point: 1200
+  },
+  {
+    userId: "rank2@example.com",
+    userName: "田中花子",
+    prefectureId: 10,
+    point: 1100
+  },
+  {
+    userId: "rank3@example.com",
+    userName: "佐藤三郎",
+    prefectureId: 40,
+    point: 1000
+  },
+  {
+    userId: "rank4@example.com",
+    userName: "鈴木桃子",
+    prefectureId: 21,
+    point: 900
+  },
+  {
+    userId: "rank5@example.com",
+    userName: "山本五郎高橋愛子渡辺二郎伊藤桜子中村四郎小林優子",
+    prefectureId: 34,
+    point: 800
+  },
+  {
+    userId: "rank6@example.com",
+    userName: "高橋愛子渡辺二郎伊藤桜子中村四郎小林優子",
+    prefectureId: 6,
+    point: 700
+  },
+  {
+    userId: "rank7@example.com",
+    userName: "渡辺二郎伊藤桜子中村四郎小林優子",
+    prefectureId: 25,
+    point: 600
+  },
+  {
+    userId: "rank8@example.com",
+    userName: "伊藤桜子中村四郎小林優子",
+    prefectureId: 34,
+    point: 500
+  },
+  {
+    userId: "rank9@example.com",
+    userName: "中村四郎小林優子",
+    prefectureId: 16,
+    point: 400
+  },
+  {
+    userId: "rank10@example.com",
+    userName: "小林優子",
+    prefectureId: 42,
+    point: 300
+  },
+];
+
+export { dummyUsers, dummyRankedUsers }

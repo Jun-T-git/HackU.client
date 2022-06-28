@@ -3,20 +3,21 @@ import List from "~/components/list/list";
 import { User } from "~/types/user";
 import { GetStaticProps, NextPage } from "next";
 import { rankedUsers } from "~/libs/api/user";
+import { dummyRankedUsers } from "~/ts/dummy";
 
 type Props = {
-  users: User[];
+  ranking: User[];
 };
 
 const Index: NextPage<Props> = ({
-  users
+  ranking
 }) => {
 
   return (
     <>
       <h1 className="text-xl font-bold">つながりランキング</h1>
       <List
-        users={users}
+        users={ranking}
         displayMode="ranking"
       />
     </>
@@ -24,9 +25,10 @@ const Index: NextPage<Props> = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const users = await rankedUsers();
+  const { ranking } = await rankedUsers();
+  // const ranking = dummyRankedUsers;
   return {
-    props: { users },
+    props: { ranking },
     revalidate: 10,
   };
 };
