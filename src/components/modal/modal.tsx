@@ -1,28 +1,18 @@
-import React, { Fragment, ReactNode } from "react"
-import { Dialog, Transition } from "@headlessui/react"
+import React, { Fragment, ReactNode } from "react";
+import { Dialog, Transition } from "@headlessui/react";
 
 type Props = {
   modalText: string;
   isOpen: boolean;
-  setIsOpen: (isOpen: (boolean)) => void
+  onClose: () => void;
   children: ReactNode;
 };
 
-const Modal: React.VFC<Props> = ({
-  children,
-  modalText,
-  isOpen,
-  setIsOpen,
-}) => {
-
-  function closeModal() {
-    setIsOpen(false)
-  }
-  
+const Modal: React.VFC<Props> = ({ children, modalText, isOpen, onClose }) => {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10" onClose={onClose}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -53,7 +43,7 @@ const Modal: React.VFC<Props> = ({
                   >
                     {modalText}
                   </Dialog.Title>
-                    {children}
+                  {children}
                 </Dialog.Panel>
               </Transition.Child>
             </div>
@@ -61,6 +51,6 @@ const Modal: React.VFC<Props> = ({
         </Dialog>
       </Transition>
     </>
-  )
-}
+  );
+};
 export default Modal;

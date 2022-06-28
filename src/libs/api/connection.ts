@@ -17,3 +17,14 @@ export const fetchConnectionsByUser = async (
   const res = await axios.post("/api/connectionByUser", params);
   return res.data;
 };
+
+type MakeConnectionParams = {
+  userId1: string;
+  userId2: string;
+  status: string; // "offline" or "online"
+};
+
+export const makeConnection = async (params: MakeConnectionParams) => {
+  const res = await axios.post("/api/connection", params);
+  return res;
+};
