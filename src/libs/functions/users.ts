@@ -1,5 +1,5 @@
 import { UsersByPrefecture } from "~/types/user";
-import { fetchUsersByPrefecture } from "../api/user";
+import { fetchUsersByPrefecture, searchUsers } from "../api/user";
 import { prefectures } from "../constants/prefectures";
 import { getPrefectureIdByName } from "./prefecture";
 
@@ -12,4 +12,10 @@ export const getUsersByPrefecture = async (): Promise<UsersByPrefecture> => {
     usersByPrefecture[prefectureName] = users;
   }
   return usersByPrefecture;
+};
+
+export const getMapPaths = async (): Promise<string[]> => {
+  const { users } = await searchUsers({});
+  const paths = users.map(({ userId }) => `/${userId}/map`);
+  return paths;
 };

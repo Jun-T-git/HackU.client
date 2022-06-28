@@ -49,8 +49,8 @@ export const connectionsToPrefectureColors = (
         return { ...prefectureColors };
       }
       const opacity0d = Math.min(
-        Math.floor((connectionValue * 255) / 2 + 32),
-        160
+        Math.floor(connectionValue * 255 * 0.9 + 25),
+        255
       );
       const opacity0x = ("0" + opacity0d.toString(16)).slice(-2);
       return {
@@ -87,9 +87,12 @@ export const getPrefectureColors = async (
         offlineColors[name] === undefined ? "#00000000" : offlineColors[name];
       const onlineColor =
         onlineColors[name] === undefined ? "#00000000" : onlineColors[name];
-      const prefectureColor0d = hex2rgba(offlineColor).map(
-        (value, i) => value + hex2rgba(onlineColor)[i]
-      );
+      const prefectureColor0d = hex2rgba(offlineColor).map((value, i) => {
+        if (i == 3 && value > 0 && hex2rgba(onlineColor)[i] > 0) {
+          return Math.min((value + hex2rgba(onlineColor)[i]) / 2);
+        }
+        return Math.min(value + hex2rgba(onlineColor)[i], 255);
+      });
       return { ...prefectureColors, [name]: rgba2hex(prefectureColor0d) };
     },
     {}

@@ -4,22 +4,22 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import JapanMap from "~/components/japanMap";
-import Swal from "sweetalert2";
 import Drawer from "~/components/dialog/drawer";
 import List from "~/components/list/list";
 import Search from "~/components/search/search";
-import Modal from "~/components/modal/modal";
-import Button from "~/components/button/button";
 import "react-spring-bottom-sheet/dist/style.css";
 import { useRecoilValue } from "recoil";
 import { userState } from "~/libs/recoil/user";
 import DropDown from "~/components/menu/dropdown";
 import { User, UsersByPrefecture } from "~/types/user";
 import { Geo } from "~/types/geo";
-import { getUsersByPrefecture } from "~/libs/functions/users";
+import { getMapPaths, getUsersByPrefecture } from "~/libs/functions/users";
 import { getGeo } from "~/libs/functions/geo";
 import { Edge, PrefectureColors } from "~/types/connection";
 import { getAllEdges, getPrefectureColors } from "~/libs/functions/connection";
+import ConnectStatusModal, {
+  UserToConnect,
+} from "~/components/modal/connectStatusModal";
 
 type Props = {
   usersByPrefecture: UsersByPrefecture | null;
@@ -27,11 +27,6 @@ type Props = {
   allEdges: Edge[];
   prefectureColors: PrefectureColors;
 };
-
-const connectRadioValue = [
-  { id: 1, item: "会って話した", value: "onLine" },
-  { id: 2, item: "オフラインで話した", value: "offLine" },
-];
 
 const Index: NextPage<Props> = ({
   usersByPrefecture,
@@ -45,14 +40,9 @@ const Index: NextPage<Props> = ({
   const [displayedUsers, setDisplayedUsers] = useState<User[]>([]);
   const [drawerHeader, setDrawerHeader] = useState<string>("");
   const [isConnectModalOpen, setIsConnectModalOpen] = useState<boolean>(false);
-  const [connectToUser, setConnectToUser] = useState<object>({
-    toUserId: "",
-    toUserName: "",
-  });
+  const [userToConnect, setUserToConnect] = useState<UserToConnect>(null);
   const [isEdgeVisible, setIsEdgeVisible] = useState<boolean>(false);
-  const [checkedValue, setCheckedValue] = useState(
-    connectRadioValue[0]["item"]
-  );
+
   const router = useRouter();
   const isReady = router.isReady;
   const userId = router.query.userId;
@@ -70,77 +60,6 @@ const Index: NextPage<Props> = ({
       </div>
     );
   }
-
-  const handleChangeRadio = (e) => setCheckedValue(e.target.value);
-  function closeModal() {
-    setIsConnectModalOpen(false);
-  }
-  function cancelConnect() {
-    Swal.fire({
-      title: "つながりの記録をキャンセルしました",
-      icon: "info",
-      showConfirmButton: false,
-      timer: 1000,
-    });
-    closeModal();
-  }
-  const RadioItems = connectRadioValue.map((value, index) => {
-    return (
-      <li key={index} className="m-5 list-none">
-        <label>
-          <input
-            type="radio"
-            value={value.item}
-            onChange={handleChangeRadio}
-            checked={checkedValue === value.item}
-          />
-          {value.item}
-        </label>
-      </li>
-    );
-  });
-
-  const buttons = (connectUser, cancelConnect) => {
-    return (
-      <div className="w-[100%]">
-        <Button
-          className="m-2  inline-flex w-[40%] justify-center rounded px-1 py-1.5 hover:opacity-50"
-          styleType="outlined"
-          type="button"
-          onClick={cancelConnect}
-        >
-          キャンセル
-        </Button>
-        <Button
-          className="m-2 inline-flex w-[40%] justify-center rounded px-1 py-1.5 hover:opacity-50"
-          type="button"
-          onClick={connectUser}
-        >
-          確定
-        </Button>
-      </div>
-    );
-  };
-  const modalText =
-    connectToUser["toUserName"] + "とのつながりを記録しますか？";
-
-  const setConnecModalState = (modalState: boolean) => {
-    setIsConnectModalOpen(modalState);
-  };
-  const connectUser = () => {
-    //つながる処理を記述
-    Swal.fire({
-      title: connectToUser["toUserName"] + "とのつながりを\n記録しました!",
-      icon: "success",
-      showConfirmButton: false,
-      timer: 1000,
-    });
-    const connectState = connectRadioValue.filter(
-      (dummyData) => dummyData.item === checkedValue
-    )[0].value;
-    console.log(connectToUser["toUserName"], connectState);
-    setConnecModalState(false);
-  };
 
   const onClickPrefecture = async (prefecture: string, users: User[]) => {
     setSelectedPrefecture(prefecture);
@@ -165,12 +84,9 @@ const Index: NextPage<Props> = ({
     setIsDrawerOpen(true);
   };
 
-  const onClickConnect = (toUserId: string, toUserName: string) => {
-    if (toUserName !== "") {
-      const toUser = { toUserId: toUserId, toUserName: toUserName };
-      setConnectToUser(toUser);
-      setConnecModalState(true);
-    }
+  const onClickConnect = async (toUserId: string, toUserName: string) => {
+    setUserToConnect({ userId: toUserId, userName: toUserName });
+    setIsConnectModalOpen(true);
     setIsDrawerOpen(false);
   };
 
@@ -191,16 +107,6 @@ const Index: NextPage<Props> = ({
                 height="28px"
               />
             </DropDown>
-            <Modal
-              modalText={modalText}
-              isOpen={isConnectModalOpen}
-              setIsOpen={(modalState) => {
-                setConnecModalState(modalState);
-              }}
-            >
-              <div className="mt-2">{RadioItems}</div>
-              <div className="mt-4">{buttons(connectUser, cancelConnect)}</div>
-            </Modal>
           </div>
         </div>
 
@@ -255,12 +161,19 @@ const Index: NextPage<Props> = ({
             />
           </ul>
         </Drawer>
+        <ConnectStatusModal
+          isOpen={isConnectModalOpen}
+          onClose={() => setIsConnectModalOpen(false)}
+          userId={userId}
+          userToConnect={userToConnect}
+        />
       </div>
     </>
   );
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  // const paths = await getMapPaths();
   const paths = ["/id125/map"];
   return {
     paths,
