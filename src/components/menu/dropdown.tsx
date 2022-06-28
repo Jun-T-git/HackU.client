@@ -11,6 +11,7 @@ type Props = {
 const DropDown: React.VFC<Props> = ({ children }) => {
   const resetUser = useResetRecoilState(userState);
   const router = useRouter();
+  const userId = router.query.userId;
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="flex">{children}</Menu.Button>
@@ -29,7 +30,19 @@ const DropDown: React.VFC<Props> = ({ children }) => {
               <button
                 className={`${
                   active && "opacity-50"
-                } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                } group flex w-full items-center px-2 py-2 text-sm`}
+                onClick={() => router.push(`/${userId}/map`)}
+              >
+                トップ
+              </button>
+            )}
+          </Menu.Item>
+          <Menu.Item>
+            {({ active }) => (
+              <button
+                className={`${
+                  active && "opacity-50"
+                } group flex w-full items-center px-2 py-2 text-sm`}
                 onClick={() => router.push("/ranking")}
               >
                 つながりランキング
@@ -41,10 +54,10 @@ const DropDown: React.VFC<Props> = ({ children }) => {
               <button
                 className={`${
                   active && "opacity-50"
-                } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                onClick={() => router.push("/account")}
+                } group flex w-full items-center px-2 py-2 text-sm`}
+                onClick={() => router.push(`/${userId}/log`)}
               >
-                アカウント情報
+                つながり記録
               </button>
             )}
           </Menu.Item>
@@ -53,7 +66,7 @@ const DropDown: React.VFC<Props> = ({ children }) => {
               <button
                 className={`${
                   active && "opacity-50"
-                } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                } group flex w-full items-center px-2 py-2 text-sm`}
                 onClick={() => resetUser()}
               >
                 ログアウト

@@ -1,4 +1,5 @@
-import { Edge, PrefectureColors } from "~/types/connection";
+import { ConnectLog, Edge, PrefectureColors } from "~/types/connection";
+import { User } from "~/types/user";
 import { fetchAllConnections, fetchConnectionsByUser } from "../api/connection";
 import { getPrefectureNameById } from "./prefecture";
 
@@ -121,4 +122,46 @@ const hex2rgba = (hex) => {
   ].map((str) => {
     return parseInt(str, 16);
   });
+};
+
+export const getConnectLogs = async (userId: string): Promise<ConnectLog[]> => {
+  const connectionsByUser = await fetchConnectionsByUser({ userId: userId });
+  const offlineConnections = connectionsByUser["offline_connections_detail"];
+  const onlineConnections = connectionsByUser["online_connections_detail"];
+  const offlineLogs = offlineConnections
+    .map((connectedUsers, prefectureId) => {
+      return connectedUsers.map((connectedUser) => {
+        return {
+          userName: connectedUser.userName,
+          prefectureName: getPrefectureNameById(prefectureId),
+          connectedAt:
+            connectedUser.updatedBy && formatDate(connectedUser.updatedBy),
+          status: "offline",
+          isFirst: connectedUser.createdBy == connectedUser.updatedBy,
+        };
+      });
+    })
+    .flat();
+  const onlineLogs = onlineConnections
+    .map((connectedUsers, prefectureId) => {
+      return connectedUsers.map((connectedUser) => {
+        return {
+          userName: connectedUser.userName,
+          prefectureName: getPrefectureNameById(prefectureId),
+          connectedAt:
+            connectedUser.updatedBy && formatDate(connectedUser.updatedBy),
+          status: "online",
+          isFirst: connectedUser.createdBy == connectedUser.updatedBy,
+        };
+      });
+    })
+    .flat();
+  const connectLogs = offlineLogs.concat(onlineLogs).sort((log1, log2) => {
+    return log1.connectedAt > log2.connectedAt ? -1 : 1;
+  });
+  return connectLogs;
+};
+
+export const formatDate = (date: string) => {
+  return date.slice(5, 10).replace("-", "/");
 };
