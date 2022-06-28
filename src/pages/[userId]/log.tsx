@@ -43,7 +43,7 @@ const Index: NextPage<Props> = ({ connectLogs }) => {
         <div className="fixed top-0 z-30 h-[70px] w-full px-2 py-3">
           <div className="flex items-center justify-between gap-3.5">
             <Link href={`/${userId}/map`}>
-              <a>
+              <a className="flex items-center">
                 <Image
                   src="/logo/logo_light01.svg"
                   width="140px"
