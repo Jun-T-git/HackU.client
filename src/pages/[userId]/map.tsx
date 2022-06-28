@@ -157,6 +157,7 @@ const Index: NextPage<Props> = ({
           <ul className="flex flex-col py-3 px-5 text-center">
             <List
               users={displayedUsers}
+              displayMode="connect"
               onClickConnect={(id, name) => onClickConnect(id, name)}
             />
           </ul>
