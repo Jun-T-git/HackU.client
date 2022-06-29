@@ -9,17 +9,11 @@ type Props = {
   ranking: User[];
 };
 
-const Index: NextPage<Props> = ({
-  ranking
-}) => {
-
+const Index: NextPage<Props> = ({ ranking }) => {
   return (
     <>
       <h1 className="text-xl font-bold">つながりランキング</h1>
-      <List
-        users={ranking}
-        displayMode="ranking"
-      />
+      <List users={ranking} displayMode="ranking" />
     </>
   );
 };
@@ -32,6 +26,5 @@ export const getStaticProps: GetStaticProps = async () => {
     revalidate: 10,
   };
 };
-
 
 export default Index;
