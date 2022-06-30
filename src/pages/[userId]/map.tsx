@@ -100,7 +100,7 @@ const Index: NextPage<Props> = ({
               allUsers={Object.values(usersByPrefecture).flat()}
               className="flex-grow"
             />
-            <DropDown>
+            <DropDown userId={userId}>
               <Image
                 src="/image/hamburger-menu.svg"
                 width="28px"

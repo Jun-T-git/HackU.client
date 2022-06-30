@@ -5,13 +5,14 @@ import { useResetRecoilState } from "recoil";
 import { userState } from "~/libs/recoil/user";
 
 type Props = {
+  userId: string;
   children: ReactNode;
 };
 
-const DropDown: React.VFC<Props> = ({ children }) => {
+const DropDown: React.VFC<Props> = ({ userId, children }) => {
   const resetUser = useResetRecoilState(userState);
   const router = useRouter();
-  const userId = router.query.userId;
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="flex">{children}</Menu.Button>

@@ -1,5 +1,4 @@
 import React from "react";
-import { formatDate } from "~/libs/functions/connection";
 import { ConnectLog } from "~/types/connection";
 import LogCard from "../card/logCard";
 
@@ -13,9 +12,7 @@ const LogList: React.VFC<Props> = ({ connectLogs }) => {
       <ul className="flex flex-col divide-y">
         {connectLogs.map((connectLog, i) => {
           const withDate =
-            i == 0 ||
-            formatDate(connectLog.connectedAt) !=
-              formatDate(connectLogs[i - 1].connectedAt);
+            i == 0 || connectLog.connectedAt != connectLogs[i - 1].connectedAt;
           return (
             <li key={`log-${i}`}>
               <LogCard {...connectLog} withDate={withDate} />

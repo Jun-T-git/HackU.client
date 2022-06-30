@@ -10,38 +10,31 @@ type Props = {
 };
 
 const List: React.VFC<Props> = ({ users, displayMode, onClickConnect }) => {
-  const list = users.map((user) => {
-    return (
-      <div>
-        {displayMode === "ranking" ? (
-          /* ランキング表示 */
-          <div>
-            <li key={user.userId} className="m-0.5">
-              <RankingCard
-                {...user}
-              />
-            </li>
-          </div>
-        ) : (
-          /* ユーザー表示（都道府県、検索） */
-          <div>
-            <li key={user.userId} className="m-0.5">
-              <Card
-                {...user}
-                onClickConnect={(id, name) => {
-                  onClickConnect(id, name);
-                }}
-              />
-            </li>
-          </div>
-        )}
-      </div>
-    );
-  });
   return (
-    <div>
-      <ul>{list}</ul>
-    </div>
+    <>
+      {users.map((user, i) => {
+        return (
+          <>
+            {displayMode === "ranking" ? (
+              /* ランキング表示 */
+              <li key={user.userId}>
+                <RankingCard rank={i + 1} {...user} />
+              </li>
+            ) : (
+              /* ユーザー表示（都道府県、検索） */
+              <li key={user.userId} className="m-0.5">
+                <Card
+                  {...user}
+                  onClickConnect={(id, name) => {
+                    onClickConnect(id, name);
+                  }}
+                />
+              </li>
+            )}
+          </>
+        );
+      })}
+    </>
   );
 };
 

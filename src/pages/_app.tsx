@@ -6,7 +6,7 @@ import { RecoilRoot } from "recoil";
 const MyApp = ({ Component, pageProps }: AppProps): ReactElement => {
   return (
     <>
-      <main>
+      <main className="min-h-screen bg-[#222222]">
         <RecoilRoot>
           <Component {...pageProps} />
         </RecoilRoot>

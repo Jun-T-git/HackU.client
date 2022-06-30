@@ -1,17 +1,13 @@
 import React, { useEffect } from "react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
-import "react-spring-bottom-sheet/dist/style.css";
 import { useRecoilValue } from "recoil";
 import { userState } from "~/libs/recoil/user";
 import { ConnectLog } from "~/types/connection";
 import { getConnectLogs } from "~/libs/functions/connection";
-import LogCard from "~/components/card/logCard";
-import DropDown from "~/components/menu/dropdown";
 import LogList from "~/components/list/logList";
 import { getLogoPaths } from "~/libs/functions/users";
+import Header from "~/components/header/header";
 
 type Props = {
   connectLogs: ConnectLog[];
@@ -31,37 +27,13 @@ const Index: NextPage<Props> = ({ connectLogs }) => {
   }, [signedInUser.userId]);
 
   if (!isReady || !connectLogs || signedInUser.userId != userId) {
-    return (
-      <div className="min-h-screen bg-[#222222] py-5 text-center text-[#555555]">
-        Loading...
-      </div>
-    );
+    return <div className="py-5 text-center text-[#555555]">Loading...</div>;
   }
 
   return (
     <>
-      <div className="min-h-screen bg-[#222222] text-center">
-        <div className="fixed top-0 z-30 h-[70px] w-full px-2 py-3">
-          <div className="flex items-center justify-between gap-3.5">
-            <Link href={`/${userId}/map`}>
-              <a className="flex items-center">
-                <Image
-                  src="/logo/logo_light01.svg"
-                  width="140px"
-                  height="35px"
-                  alt="COM.PY-logo"
-                />
-              </a>
-            </Link>
-            <DropDown>
-              <Image
-                src="/image/hamburger-menu.svg"
-                width="28px"
-                height="28px"
-              />
-            </DropDown>
-          </div>
-        </div>
+      <div className="text-center">
+        <Header userId={userId} />
         <div className="flex flex-col gap-y-5 px-5 pt-[70px]">
           <div>
             <h2 className="mb-2 text-lg font-bold text-white">
