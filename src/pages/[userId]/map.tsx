@@ -221,6 +221,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
     "/id128/map",
     "/id129/map",
     "/id130/map",
+    "/id131/map",
+    "/id132/map",
+    "/id133/map",
+    "/id134/map",
+    "/id135/map",
+    "/id136/map",
+    "/id137/map",
+    "/id138/map",
+    "/id139/map",
+    "/id140/map",
   ];
   return {
     paths,
