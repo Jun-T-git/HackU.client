@@ -498,31 +498,31 @@ const dummyRankedUsers = [
   },
   {
     userId: "rank5@example.com",
-    userName: "山本五郎高橋愛子渡辺二郎伊藤桜子中村四郎小林優子",
+    userName: "山本五郎",
     prefectureId: 34,
     point: 800
   },
   {
     userId: "rank6@example.com",
-    userName: "高橋愛子渡辺二郎伊藤桜子中村四郎小林優子",
+    userName: "高橋愛子",
     prefectureId: 6,
     point: 700
   },
   {
     userId: "rank7@example.com",
-    userName: "渡辺二郎伊藤桜子中村四郎小林優子",
+    userName: "渡辺二郎",
     prefectureId: 25,
     point: 600
   },
   {
     userId: "rank8@example.com",
-    userName: "伊藤桜子中村四郎小林優子",
+    userName: "伊藤桜子",
     prefectureId: 34,
     point: 500
   },
   {
     userId: "rank9@example.com",
-    userName: "中村四郎小林優子",
+    userName: "中村四郎",
     prefectureId: 16,
     point: 400
   },
