@@ -78,7 +78,19 @@ const Index: NextPage<Props> = ({ connectLogs }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   // const paths = await getLogoPaths();
-  const paths = ["/id125/log"];
+  const paths = [
+    "/id120/log",
+    "/id121/log",
+    "/id122/log",
+    "/id123/log",
+    "/id124/log",
+    "/id125/log",
+    "/id126/log",
+    "/id127/log",
+    "/id128/log",
+    "/id129/log",
+    "/id130/log",
+  ];
   return {
     paths,
     fallback: true,
