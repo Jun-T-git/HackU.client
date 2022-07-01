@@ -19,7 +19,11 @@ const Index: NextPage<Props> = ({ connectLogs }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.isReady && signedInUser.userId != router.query.userId) {
+    if (
+      router.isReady &&
+      router.query.userId != "" &&
+      signedInUser.userId != router.query.userId
+    ) {
       router.push("/");
     }
   }, [signedInUser.userId, router.query.userId, router.isReady]);
