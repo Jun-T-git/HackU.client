@@ -50,7 +50,7 @@ const ConnectStatusModal: React.VFC<Props> = ({
     }
     // 申請完了処理
     Swal.fire({
-      title: `${userToConnect?.userName}さんとのつながりを記録しました？`,
+      title: `${userToConnect?.userName}さんとのつながりを記録しました`,
       icon: "success",
       showConfirmButton: false,
       timer: 1000,
