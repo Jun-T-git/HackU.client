@@ -28,3 +28,12 @@ export const makeConnection = async (params: MakeConnectionParams) => {
   const res = await axios.post("/api/connection", params);
   return res;
 };
+
+type LogParams = {
+  userId: string;
+};
+
+export const fetchLog = async (params: LogParams) => {
+  const res = await axios.post("/api/log", params);
+  return res.data;
+};
