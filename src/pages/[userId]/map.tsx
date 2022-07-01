@@ -48,7 +48,7 @@ const Index: NextPage<Props> = ({
   useEffect(() => {
     if (
       router.isReady &&
-      router.query.userId != "" &&
+      router.query.userId &&
       signedInUser.userId != router.query.userId
     ) {
       console.log(signedInUser.userId, router.isReady, router.query.userId); //todo: 削除
