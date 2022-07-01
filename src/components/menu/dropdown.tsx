@@ -31,7 +31,7 @@ const DropDown: React.VFC<Props> = ({ userId, children }) => {
               <button
                 className={`${
                   active && "opacity-50"
-                } group flex w-full items-center px-2 py-2 text-sm`}
+                } group flex min-h-[50px] w-full items-center px-5 py-3 text-sm`}
                 onClick={() => router.push(`/${userId}/map`)}
               >
                 トップ
@@ -43,7 +43,7 @@ const DropDown: React.VFC<Props> = ({ userId, children }) => {
               <button
                 className={`${
                   active && "opacity-50"
-                } group flex w-full items-center px-2 py-2 text-sm`}
+                } group flex min-h-[50px] w-full items-center px-5 py-3 text-sm`}
                 onClick={() => router.push("/ranking")}
               >
                 つながりランキング
@@ -55,7 +55,7 @@ const DropDown: React.VFC<Props> = ({ userId, children }) => {
               <button
                 className={`${
                   active && "opacity-50"
-                } group flex w-full items-center px-2 py-2 text-sm`}
+                } group flex min-h-[50px] w-full items-center px-5 py-3 text-sm`}
                 onClick={() => router.push(`/${userId}/log`)}
               >
                 つながり記録
@@ -67,7 +67,7 @@ const DropDown: React.VFC<Props> = ({ userId, children }) => {
               <button
                 className={`${
                   active && "opacity-50"
-                } group flex w-full items-center px-2 py-2 text-sm`}
+                } group flex min-h-[50px] w-full items-center px-5 py-3 text-sm`}
                 onClick={() => resetUser()}
               >
                 ログアウト

@@ -17,21 +17,24 @@ const Index: NextPage<Props> = ({ ranking }) => {
   const signedInUser = useRecoilValue(userState);
 
   const router = useRouter();
-  const isReady = router.isReady;
 
   useEffect(() => {
-    if (signedInUser.userId == "") {
+    if (router.isReady && signedInUser.userId == "") {
       router.push("/");
     }
-  }, [signedInUser.userId]);
+  }, [signedInUser.userId, router.isReady]);
 
-  if (!isReady || signedInUser.userId == "") {
-    return <div className="py-5 text-center text-[#555555]">Loading...</div>;
+  if (!router.isReady || signedInUser.userId == "") {
+    return (
+      <span className="flex justify-center py-5 text-[#555555]">
+        Loading...
+      </span>
+    );
   }
   return (
     <>
       <Header userId={signedInUser.userId} />
-      <div className="py-[70px] px-5 text-center">
+      <div className="px-5 pb-20 text-center">
         <h2 className="mb-2 text-lg font-bold text-white">
           つながりランキング
         </h2>
@@ -46,8 +49,8 @@ const Index: NextPage<Props> = ({ ranking }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { ranking } = await rankedUsers();
-  // const ranking = dummyRankedUsers;
+  // const { ranking } = await rankedUsers();
+  const ranking = dummyRankedUsers; // todo: バックエンドから取得
   return {
     props: { ranking },
     revalidate: 10,

@@ -8,16 +8,19 @@ import { signIn } from "~/libs/api/auth";
 import { useSetRecoilState } from "recoil";
 import { userState } from "~/libs/recoil/user";
 import { fetchUser } from "~/libs/api/user";
+import Loading from "~/components/loading/loading";
 
 const Index: React.VFC = () => {
   const setUser = useSetRecoilState(userState);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     // サインイン
     const signInParams = {
       userId: email,
@@ -25,6 +28,7 @@ const Index: React.VFC = () => {
     const { status } = await signIn(signInParams);
     if (status == 400) {
       setErrorMessage("※メールアドレスまたはパスワードが間違っています");
+      setIsLoading(false);
       return;
     }
     setErrorMessage("");
@@ -33,6 +37,7 @@ const Index: React.VFC = () => {
       userIdKey: email,
     };
     const { users } = await fetchUser(fetchUserParams);
+    setIsLoading(false);
     if (users.length > 0) {
       setUser(users[0]);
       // 日本地図ページに遷移
@@ -76,7 +81,10 @@ const Index: React.VFC = () => {
                 {errorMessage}
               </span>
             </div>
-            <div className="mt-7 flex justify-center gap-x-5">
+            <div className="mx-auto h-7 text-center">
+              {isLoading && <Loading />}
+            </div>
+            <div className="flex justify-center gap-x-5">
               <Button
                 className="block w-[40%]"
                 styleType="outlined"

@@ -28,13 +28,12 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
   const [drawerHeader, setDrawerHeader] = useState<string>("");
   const router = useRouter();
-  const isReady = router.isReady;
 
   useEffect(() => {
-    if (signedInUser.userId) {
+    if (router.isReady && signedInUser.userId) {
       router.push(`/${signedInUser.userId}/map`);
     }
-  }, [signedInUser.userId]);
+  }, [signedInUser.userId, router.isReady, router.query.userId]);
 
   const onClickPrefecture = async (prefecture: string) => {
     setSelectedPrefecture(prefecture);
@@ -50,87 +49,85 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
     }
   };
 
-  if (!isReady || !usersByPrefecture || !geo || signedInUser.userId) {
+  if (!router.isReady || !usersByPrefecture || !geo || signedInUser.userId) {
     return (
-      <div className="min-h-screen bg-[#222222] py-5 text-center text-[#555555]">
+      <span className="flex justify-center py-5 text-[#555555]">
         Loading...
-      </div>
+      </span>
     );
   }
 
   return (
     <>
-      <div className="min-h-screen bg-[#222222] text-center">
-        <div className="fixed top-0 z-30 h-[70px] w-full px-2 py-3">
-          <div className="flex items-center justify-between gap-3.5">
-            <Image
-              src="/logo/logo_light01.svg"
-              width="140px"
-              height="35px"
-              alt="COM.PY-logo"
-            />
-            <div className="flex items-center gap-3">
-              <Link href="/signup">
-                <a className="rounded border border-[#dddddd] px-3 py-2.5 text-sm font-bold text-[#dddddd]">
-                  新規登録
-                </a>
-              </Link>
-              <Link href="/signin">
-                <a className="rounded border border-[#dddddd] px-3 py-2.5 text-sm font-bold text-[#dddddd]">
-                  ログイン
-                </a>
-              </Link>
-            </div>
+      <div className="z-30 h-[70px] w-full px-2 py-3">
+        <div className="flex items-center justify-between gap-3.5">
+          <Image
+            src="/logo/logo_light01.svg"
+            width="140px"
+            height="35px"
+            alt="COM.PY-logo"
+          />
+          <div className="flex items-center gap-3">
+            <Link href="/signup">
+              <a className="rounded border border-[#dddddd] px-3 py-2.5 text-sm font-bold text-[#dddddd]">
+                新規登録
+              </a>
+            </Link>
+            <Link href="/signin">
+              <a className="rounded border border-[#dddddd] px-3 py-2.5 text-sm font-bold text-[#dddddd]">
+                ログイン
+              </a>
+            </Link>
           </div>
         </div>
-
-        <div className="flex justify-center py-5 pt-[70px]">
-          <TransformWrapper wheel={{ step: 0.05 }}>
-            <TransformComponent>
-              <div className="min-h-[80vh] w-full">
-                <JapanMap
-                  edges={allEdges}
-                  focusedPrefecture={selectedPrefecture}
-                  onClickPrefecture={onClickPrefecture}
-                  onClickOutside={onClickOutside}
-                  usersByPrefecture={usersByPrefecture}
-                  geo={geo}
-                />
-              </div>
-            </TransformComponent>
-          </TransformWrapper>
-        </div>
-
-        <Drawer
-          open={isDrawerOpen}
-          onDismiss={() => setIsDrawerOpen(false)}
-          blocking={false}
-          header={
-            <span className="mt-1 block w-full rounded bg-red-500 py-1 font-bold text-white">
-              {drawerHeader}
-            </span>
-          }
-          snapPoints={({ maxHeight }) => [maxHeight * 0.3, maxHeight * 0.9]}
-        >
-          <div className="flex flex-col items-center gap-y-3 py-5 px-5 text-center">
-            <span className="text-[#222222 text-sm">
-              ユーザー情報の閲覧はログイン中の方にのみご利用いただけます
-            </span>
-            <div className="flex w-full justify-center gap-3.5">
-              <Link href="/signup">
-                <a className="flex-grow rounded border border-red-500 py-2.5 font-bold text-red-500">
-                  新規登録
-                </a>
-              </Link>
-              <Link href="/signin">
-                <a className="flex-grow rounded border border-red-500 py-2.5 font-bold text-red-500">
-                  ログイン
-                </a>
-              </Link>
-            </div>
-          </div>
-        </Drawer>
       </div>
+
+      <div className="flex justify-center py-5 pt-[70px]">
+        <TransformWrapper wheel={{ step: 0.05 }}>
+          <TransformComponent>
+            <div className="min-h-[80vh] w-full">
+              <JapanMap
+                edges={allEdges}
+                focusedPrefecture={selectedPrefecture}
+                onClickPrefecture={onClickPrefecture}
+                onClickOutside={onClickOutside}
+                usersByPrefecture={usersByPrefecture}
+                geo={geo}
+              />
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
+      </div>
+
+      <Drawer
+        open={isDrawerOpen}
+        onDismiss={() => setIsDrawerOpen(false)}
+        blocking={false}
+        header={
+          <span className="mt-1 block w-full rounded bg-red-500 py-1 font-bold text-white">
+            {drawerHeader}
+          </span>
+        }
+        snapPoints={({ maxHeight }) => [maxHeight * 0.3, maxHeight * 0.9]}
+      >
+        <div className="flex flex-col items-center gap-y-3 py-5 px-5 text-center">
+          <span className="text-[#222222 text-sm">
+            ユーザー情報の閲覧はログイン中の方にのみご利用いただけます
+          </span>
+          <div className="flex w-full justify-center gap-3.5">
+            <Link href="/signup">
+              <a className="flex-grow rounded border border-red-500 py-2.5 font-bold text-red-500">
+                新規登録
+              </a>
+            </Link>
+            <Link href="/signin">
+              <a className="flex-grow rounded border border-red-500 py-2.5 font-bold text-red-500">
+                ログイン
+              </a>
+            </Link>
+          </div>
+        </div>
+      </Drawer>
     </>
   );
 };

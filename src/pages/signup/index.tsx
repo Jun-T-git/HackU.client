@@ -11,6 +11,7 @@ import { prefectures } from "~/libs/constants/prefectures";
 import { getPrefectureIdByName } from "~/libs/functions/prefecture";
 import { textValidation } from "~/libs/functions/validation";
 import { userState } from "~/libs/recoil/user";
+import Loading from "~/components/loading/loading";
 
 // todo: 余裕があればValidation実装
 // // validation rule
@@ -41,10 +42,12 @@ const Index: React.VFC = () => {
   const [password, setPassword] = useState<string>("");
   const [prefectureId, setPrefectureId] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     // サインアップ
     const params = {
       userId: email,
@@ -52,6 +55,7 @@ const Index: React.VFC = () => {
       prefectureId: prefectureId,
     };
     const { status } = await signUp(params);
+    setIsLoading(false);
     if (status == 400) {
       setErrorMessage("※登録済みのメールアドレスです");
       return;
@@ -120,7 +124,10 @@ const Index: React.VFC = () => {
                 {errorMessage}
               </span>
             </div>
-            <div className="mt-7 flex justify-center gap-x-5">
+            <div className="mx-auto h-7 text-center">
+              {isLoading && <Loading />}
+            </div>
+            <div className="flex justify-center gap-x-5">
               <Button
                 className="block w-[40%]"
                 styleType="outlined"

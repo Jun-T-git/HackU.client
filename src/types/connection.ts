@@ -13,4 +13,5 @@ export type ConnectLog = {
   connectedAt: string;
   status: string;
   isFirst: boolean;
+  point: number;
 };

@@ -25,13 +25,9 @@ const LogCard: React.VFC<Props> = ({
         <span className="col-span-3 justify-self-start text-sm">
           {prefectureName}
         </span>
-        {isFirst ? (
-          <span className="col-span-2 justify-self-start text-xs text-[#777777]">
-            NEW
-          </span>
-        ) : (
-          ""
-        )}
+        <span className="col-span-2 justify-self-start text-xs text-[#777777]">
+          {isFirst ? "NEW" : ""}
+        </span>
         <span
           className={`col-span-1 justify-self-end text-sm ${
             status == "offline" ? "text-red-600" : "text-blue-600"

@@ -44,20 +44,23 @@ const Index: NextPage<Props> = ({
   const [isEdgeVisible, setIsEdgeVisible] = useState<boolean>(false);
 
   const router = useRouter();
-  const isReady = router.isReady;
-  const userId = router.query.userId;
 
   useEffect(() => {
-    if (signedInUser.userId != userId) {
+    if (router.isReady && signedInUser.userId != router.query.userId) {
       router.push("/");
     }
-  }, [signedInUser.userId]);
+  }, [signedInUser.userId, router.isReady, router.query.userId]);
 
-  if (!isReady || !usersByPrefecture || !geo || signedInUser.userId != userId) {
+  if (
+    !router.isReady ||
+    !usersByPrefecture ||
+    !geo ||
+    signedInUser.userId != router.query.userId
+  ) {
     return (
-      <div className="min-h-screen bg-[#222222] py-5 text-center text-[#555555]">
+      <span className="flex justify-center py-5 text-[#555555]">
         Loading...
-      </div>
+      </span>
     );
   }
 
@@ -92,83 +95,77 @@ const Index: NextPage<Props> = ({
 
   return (
     <>
-      <div className="min-h-screen bg-[#222222] text-center">
-        <div className="fixed top-0 z-30 h-[70px] w-full px-2 py-3">
-          <div className="flex items-center gap-3.5">
-            <Search
-              onSearch={onSubmitSearch}
-              allUsers={Object.values(usersByPrefecture).flat()}
-              className="flex-grow"
-            />
-            <DropDown userId={userId}>
-              <Image
-                src="/image/hamburger-menu.svg"
-                width="28px"
-                height="28px"
-              />
-            </DropDown>
-          </div>
+      <div className="z-30 h-[70px] w-full px-2 py-3">
+        <div className="flex items-center gap-3.5">
+          <Search
+            onSearch={onSubmitSearch}
+            allUsers={Object.values(usersByPrefecture).flat()}
+            className="flex-grow"
+          />
+          <DropDown userId={router.query.userId}>
+            <Image src="/image/hamburger-menu.svg" width="28px" height="28px" />
+          </DropDown>
         </div>
-
-        <div className="pt-[70px]">
-          <div className="flex justify-end px-2 py-3">
-            <button
-              className={`flex items-center justify-center rounded border border-[#888888] p-2 ${
-                isEdgeVisible && "opacity-30"
-              }`}
-              onClick={() => {
-                setIsEdgeVisible((prev) => !prev);
-              }}
-            >
-              <Image src="/image/edge.svg" width="20px" height="20px" />
-            </button>
-          </div>
-          <div className="flex justify-center">
-            <TransformWrapper wheel={{ step: 0.05 }}>
-              <TransformComponent>
-                <div className="min-h-[80vh] w-full">
-                  <JapanMap
-                    edges={allEdges}
-                    focusedPrefecture={selectedPrefecture}
-                    onClickPrefecture={onClickPrefecture}
-                    onClickOutside={onClickOutside}
-                    usersByPrefecture={usersByPrefecture}
-                    geo={geo}
-                    prefectureColors={prefectureColors}
-                    isEdgeVisible={isEdgeVisible}
-                  />
-                </div>
-              </TransformComponent>
-            </TransformWrapper>
-          </div>
-        </div>
-
-        <Drawer
-          open={isDrawerOpen}
-          onDismiss={() => setIsDrawerOpen(false)}
-          blocking={false}
-          header={
-            <span className="mt-1 block w-full rounded bg-red-500 py-1 font-bold text-white">
-              {drawerHeader}
-            </span>
-          }
-          snapPoints={({ maxHeight }) => [maxHeight * 0.4, maxHeight * 0.9]}
-        >
-          <ul className="flex flex-col py-3 px-5 text-center">
-            <List
-              users={displayedUsers}
-              displayMode="connect"
-              onClickConnect={(id, name) => onClickConnect(id, name)}
-            />
-          </ul>
-        </Drawer>
-        <ConnectStatusModal
-          isOpen={isConnectModalOpen}
-          onClose={() => setIsConnectModalOpen(false)}
-          userId={userId}
-          userToConnect={userToConnect}
-        />
       </div>
+
+      <div>
+        <div className="flex justify-end px-2 py-3">
+          <button
+            className={`flex items-center justify-center rounded border border-[#888888] p-2 ${
+              isEdgeVisible && "opacity-30"
+            }`}
+            onClick={() => {
+              setIsEdgeVisible((prev) => !prev);
+            }}
+          >
+            <Image src="/image/edge.svg" width="20px" height="20px" />
+          </button>
+        </div>
+        <div className="flex justify-center">
+          <TransformWrapper wheel={{ step: 0.05 }}>
+            <TransformComponent>
+              <div className="min-h-[80vh] w-full">
+                <JapanMap
+                  edges={allEdges}
+                  focusedPrefecture={selectedPrefecture}
+                  onClickPrefecture={onClickPrefecture}
+                  onClickOutside={onClickOutside}
+                  usersByPrefecture={usersByPrefecture}
+                  geo={geo}
+                  prefectureColors={prefectureColors}
+                  isEdgeVisible={isEdgeVisible}
+                />
+              </div>
+            </TransformComponent>
+          </TransformWrapper>
+        </div>
+      </div>
+
+      <Drawer
+        open={isDrawerOpen}
+        onDismiss={() => setIsDrawerOpen(false)}
+        blocking={false}
+        header={
+          <span className="mt-1 block w-full rounded bg-red-500 py-1 font-bold text-white">
+            {drawerHeader}
+          </span>
+        }
+        snapPoints={({ maxHeight }) => [maxHeight * 0.4, maxHeight * 0.9]}
+      >
+        <ul className="flex flex-col py-3 px-5 text-center">
+          <List
+            users={displayedUsers}
+            displayMode="connect"
+            onClickConnect={(id, name) => onClickConnect(id, name)}
+          />
+        </ul>
+      </Drawer>
+      <ConnectStatusModal
+        isOpen={isConnectModalOpen}
+        onClose={() => setIsConnectModalOpen(false)}
+        userId={router.query.userId}
+        userToConnect={userToConnect}
+      />
     </>
   );
 };

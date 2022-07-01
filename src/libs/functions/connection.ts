@@ -138,6 +138,7 @@ export const getConnectLogs = async (userId: string): Promise<ConnectLog[]> => {
             connectedUser.updatedBy && formatDate(connectedUser.updatedBy),
           status: "offline",
           isFirst: connectedUser.createdBy == connectedUser.updatedBy,
+          point: connectedUser.point,
         };
       });
     })
@@ -152,6 +153,7 @@ export const getConnectLogs = async (userId: string): Promise<ConnectLog[]> => {
             connectedUser.updatedBy && formatDate(connectedUser.updatedBy),
           status: "online",
           isFirst: connectedUser.createdBy == connectedUser.updatedBy,
+          point: connectedUser.point,
         };
       });
     })
@@ -162,6 +164,28 @@ export const getConnectLogs = async (userId: string): Promise<ConnectLog[]> => {
   return connectLogs;
 };
 
+export const getToday = () => {
+  const rightNow = new Date();
+  const dateStringArray = rightNow.toLocaleDateString().split("/"); // ex: [2022,7,1]
+  const year = dateStringArray[0];
+  const month = ("0" + dateStringArray[1]).slice(-2);
+  const date = ("0" + dateStringArray[2]).slice(-2);
+  const formattedDate = `${year}/${month}/${date}`;
+  return formattedDate; // ex: 2022/07/01
+};
+
+export const getPointThisMonth = (connectLogs: ConnectLog[]) => {
+  const thisMonth = getToday().slice(0, 7); // ex: 2022/07
+  let pointThisMonth = 0;
+  for (const connectLog of connectLogs) {
+    if (connectLog.connectedAt.slice(0, 7) != thisMonth) {
+      break;
+    }
+    pointThisMonth += connectLog.point;
+  }
+  return pointThisMonth;
+};
+
 export const formatDate = (date: string) => {
-  return date.slice(5, 10).replace("-", "/");
+  return date.slice(0, 10).replaceAll("-", "/"); // ex: 2022/07/01
 };
