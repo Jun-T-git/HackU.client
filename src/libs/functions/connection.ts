@@ -1,10 +1,9 @@
 import { ConnectLog, Edge, PrefectureColors } from "~/types/connection";
-import { User } from "~/types/user";
 import { fetchAllConnections, fetchConnectionsByUser } from "../api/connection";
 import { getPrefectureNameById } from "./prefecture";
 
-const OFFLINE_COLOR = "#ff8800";
-const ONLINE_COLOR = "#0088ff";
+const OFFLINE_COLOR = "#ffaa00";
+const ONLINE_COLOR = "#00aaff";
 
 export const connectionsToEdges = (
   connections: number[][],
@@ -90,21 +89,31 @@ export const getPrefectureColors = async (
         onlineColors[name] === undefined ? "#00000000" : onlineColors[name];
       const prefectureColor0d = hex2rgba(offlineColor).map((value, i) => {
         if (i == 3 && value > 0 && hex2rgba(onlineColor)[i] > 0) {
-          return Math.min((value + hex2rgba(onlineColor)[i]) / 2);
+          return Math.min((value + hex2rgba(onlineColor)[i]) / 2, 255);
         }
-        return Math.min(value + hex2rgba(onlineColor)[i], 255);
+        return value + hex2rgba(onlineColor)[i];
       });
-      return { ...prefectureColors, [name]: rgba2hex(prefectureColor0d) };
+      const maxValue = prefectureColor0d
+        .slice(0, -1)
+        .reduce((val1, val2) => (val1 > val2 ? val1 : val2));
+      const normalized0d = prefectureColor0d.map((value, i) => {
+        if (i == 3) {
+          return value;
+        }
+        return Math.min((value / maxValue) * 255, 255);
+      });
+      return { ...prefectureColors, [name]: rgba2hex(normalized0d) };
     },
     {}
   );
   return prefectureColors;
 };
 
-const rgba2hex = (rgba) => {
+const rgba2hex = (rgba: number[]): string => {
+  const intRgba = rgba.map((value) => Math.floor(value));
   return (
     "#" +
-    rgba
+    intRgba
       .map(function (value) {
         return ("0" + value.toString(16)).slice(-2);
       })
@@ -112,7 +121,7 @@ const rgba2hex = (rgba) => {
   );
 };
 
-const hex2rgba = (hex) => {
+const hex2rgba = (hex: string): number[] => {
   if (hex.slice(0, 1) == "#") hex = hex.slice(1);
   return [
     hex.slice(0, 2),

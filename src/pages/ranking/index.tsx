@@ -49,8 +49,8 @@ const Index: NextPage<Props> = ({ ranking }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  // const { ranking } = await rankedUsers();
-  const ranking = dummyRankedUsers; // todo: バックエンドから取得
+  const { ranking } = await rankedUsers();
+  // const ranking = dummyRankedUsers; // todo: バックエンドから取得
   return {
     props: { ranking },
     revalidate: 10,

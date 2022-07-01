@@ -51,7 +51,6 @@ const Index: NextPage<Props> = ({
       router.query.userId &&
       signedInUser.userId != router.query.userId
     ) {
-      console.log(signedInUser.userId, router.isReady, router.query.userId); //todo: 削除
       router.push("/");
     }
   }, [signedInUser.userId, router.isReady, router.query.userId]);

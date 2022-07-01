@@ -37,7 +37,6 @@ const Index: React.VFC = () => {
       userIdKey: email,
     };
     const { users } = await fetchUser(fetchUserParams);
-    setIsLoading(false);
     if (users.length > 0) {
       setUser(users[0]);
       // 日本地図ページに遷移

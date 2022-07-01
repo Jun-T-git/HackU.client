@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSetRecoilState } from "recoil";
 import Swal from "sweetalert2";
 import { makeConnection } from "~/libs/api/connection";
+import { userState } from "~/libs/recoil/user";
 import Button from "../button/button";
 import RadioField from "../field/radio";
 import Modal from "./modal";
@@ -28,6 +30,7 @@ const ConnectStatusModal: React.VFC<Props> = ({
   userId,
   userToConnect,
 }) => {
+  const setUser = useSetRecoilState(userState);
   const [connectStatus, setConnectStatus] = useState<string>("");
   const [connectErrorMessage, setConnectErrorMessage] = useState<string>("");
 
@@ -43,14 +46,17 @@ const ConnectStatusModal: React.VFC<Props> = ({
       userId2: userToConnect?.userId,
       status: connectStatus,
     };
-    const { status } = await makeConnection(params);
+    const { status, data } = await makeConnection(params);
     if (status != 200) {
       setConnectErrorMessage("つながりの記録に失敗しました");
       return;
     }
+    setUser((prev) => {
+      return { ...prev, point: prev.point + data.point };
+    });
     // 申請完了処理
     Swal.fire({
-      title: `${userToConnect?.userName}さんとのつながりを記録しました？`,
+      title: `${userToConnect?.userName}さんとのつながりを記録しました`,
       icon: "success",
       showConfirmButton: false,
       timer: 1000,

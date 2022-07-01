@@ -55,9 +55,9 @@ const Index: React.VFC = () => {
       prefectureId: prefectureId,
     };
     const { status } = await signUp(params);
-    setIsLoading(false);
     if (status == 400) {
       setErrorMessage("※登録済みのメールアドレスです");
+      setIsLoading(false);
       return;
     }
     setErrorMessage("");
