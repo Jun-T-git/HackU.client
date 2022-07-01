@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
-import List from "~/components/list/list";
 import { User } from "~/types/user";
 import { rankedUsers } from "~/libs/api/user";
 import { dummyRankedUsers } from "~/ts/dummy";
 import Header from "~/components/header/header";
 import { useRecoilValue } from "recoil";
 import { userState } from "~/libs/recoil/user";
+import RankingList from "~/components/list/rankingList";
 
 type Props = {
   ranking: User[];
@@ -40,7 +40,7 @@ const Index: NextPage<Props> = ({ ranking }) => {
         </h2>
         <div className="rounded-md bg-white">
           <ul className="flex flex-col divide-y">
-            <List users={ranking} displayMode="ranking" />
+            <RankingList users={ranking} />
           </ul>
         </div>
       </div>

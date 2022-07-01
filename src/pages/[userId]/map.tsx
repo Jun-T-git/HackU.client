@@ -15,17 +15,23 @@ import { User, UsersByPrefecture } from "~/types/user";
 import { Geo } from "~/types/geo";
 import { getMapPaths, getUsersByPrefecture } from "~/libs/functions/users";
 import { getGeo } from "~/libs/functions/geo";
-import { Edge, PrefectureColors } from "~/types/connection";
-import { getAllEdges, getPrefectureColors } from "~/libs/functions/connection";
+import { ConnectedUsers, Edge, PrefectureColors } from "~/types/connection";
+import {
+  getAllEdges,
+  getConnectedUsers,
+  getPrefectureColors,
+} from "~/libs/functions/connection";
 import ConnectStatusModal, {
   UserToConnect,
 } from "~/components/modal/connectStatusModal";
+import { fetchConnectionsByUser } from "~/libs/api/connection";
 
 type Props = {
   usersByPrefecture: UsersByPrefecture | null;
   geo: Geo;
   allEdges: Edge[];
   prefectureColors: PrefectureColors;
+  connectedUsers: ConnectedUsers;
 };
 
 const Index: NextPage<Props> = ({
@@ -33,6 +39,7 @@ const Index: NextPage<Props> = ({
   geo,
   allEdges,
   prefectureColors,
+  connectedUsers,
 }) => {
   const signedInUser = useRecoilValue(userState);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
@@ -159,7 +166,7 @@ const Index: NextPage<Props> = ({
         <ul className="flex flex-col py-3 px-5 text-center">
           <List
             users={displayedUsers}
-            displayMode="connect"
+            connectedUsers={connectedUsers}
             onClickConnect={(id, name) => onClickConnect(id, name)}
           />
         </ul>
@@ -188,9 +195,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const geo = getGeo();
   const allEdges = await getAllEdges();
   const userId = params.userId as string;
-  const prefectureColors = await getPrefectureColors(userId);
+  const connectionsByUser = await fetchConnectionsByUser({ userId: userId });
+  const prefectureColors = await getPrefectureColors(connectionsByUser);
+  const connectedUsers = await getConnectedUsers(connectionsByUser);
   return {
-    props: { usersByPrefecture, geo, allEdges, prefectureColors },
+    props: {
+      usersByPrefecture,
+      geo,
+      allEdges,
+      prefectureColors,
+      connectedUsers,
+    },
     revalidate: 10,
   };
 };

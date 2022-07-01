@@ -1,4 +1,9 @@
-import { ConnectLog, Edge, PrefectureColors } from "~/types/connection";
+import {
+  ConnectedUsers,
+  ConnectLog,
+  Edge,
+  PrefectureColors,
+} from "~/types/connection";
 import {
   fetchAllConnections,
   fetchConnectionsByUser,
@@ -68,9 +73,8 @@ export const connectionsToPrefectureColors = (
 };
 
 export const getPrefectureColors = async (
-  userId: string
+  connectionsByUser
 ): Promise<PrefectureColors> => {
-  const connectionsByUser = await fetchConnectionsByUser({ userId: userId });
   const offlineConnections = connectionsByUser["offline_connections"];
   const onlineConnections = connectionsByUser["online_connections"];
   const offlineColors = connectionsToPrefectureColors(
@@ -135,6 +139,29 @@ const hex2rgba = (hex: string): number[] => {
   ].map((str) => {
     return parseInt(str, 16);
   });
+};
+
+export const getConnectedUsers = async (
+  connectionsByUser
+): Promise<ConnectedUsers> => {
+  const offlineConnections = connectionsByUser["offline_connections_detail"];
+  const onlineConnections = connectionsByUser["online_connections_detail"];
+  const connectedUsers = {};
+  for (const connectedUsersOffline of offlineConnections) {
+    for (const connectedUser of connectedUsersOffline) {
+      connectedUsers[connectedUser.userId] = "offline";
+    }
+  }
+  for (const connectedUsersOnline of onlineConnections) {
+    for (const connectedUser of connectedUsersOnline) {
+      if (Object.keys(connectedUsers).includes(connectedUser.userId)) {
+        connectedUsers[connectedUser.userId] = "both";
+      } else {
+        connectedUsers[connectedUser.userId] = "online";
+      }
+    }
+  }
+  return connectedUsers;
 };
 
 export const getConnectLogs = async (userId: string): Promise<ConnectLog[]> => {

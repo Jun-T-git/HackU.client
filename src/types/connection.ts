@@ -15,3 +15,7 @@ export type ConnectLog = {
   isFirst: boolean;
   point: number;
 };
+
+export type ConnectedUsers = {
+  [userId: string]: string; // online | offline | both
+};
