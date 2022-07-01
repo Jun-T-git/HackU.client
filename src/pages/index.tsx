@@ -82,10 +82,10 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
         </div>
       </div>
 
-      <div className="flex justify-center py-5 pt-[70px]">
+      <div className="flex justify-center py-5">
         <TransformWrapper wheel={{ step: 0.05 }}>
           <TransformComponent>
-            <div className="min-h-[80vh] w-full">
+            <div className="min-h-[50vh] w-full">
               <JapanMap
                 edges={allEdges}
                 focusedPrefecture={selectedPrefecture}
@@ -97,6 +97,16 @@ const Index: NextPage<Props> = ({ usersByPrefecture, geo, allEdges }) => {
             </div>
           </TransformComponent>
         </TransformWrapper>
+      </div>
+      <div className="flex flex-col gap-y-1 rounded py-5 px-5 text-xs">
+        <div className="flex gap-x-2">
+          <span className="font-bold text-[#ffaa00]">ー</span>
+          <span className="text-[#aaaaaa]">直接のつながりがある</span>
+        </div>
+        <div className="flex gap-x-2">
+          <span className="font-bold text-[#00aaff]">ー</span>
+          <span className="text-[#aaaaaa]">オンラインのつながりがある</span>
+        </div>
       </div>
 
       <Drawer

@@ -70,6 +70,9 @@ const ConnectStatusModal: React.VFC<Props> = ({
       isOpen={isOpen}
       onClose={onClose}
     >
+      <span className="font-xs mt-2 mb-5 block text-[#777777]">
+        ※ 反映には少し時間がかかります
+      </span>
       <RadioField
         className="my-3"
         options={connectRadioOptions}

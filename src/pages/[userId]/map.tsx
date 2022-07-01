@@ -135,7 +135,7 @@ const Index: NextPage<Props> = ({
         <div className="flex justify-center">
           <TransformWrapper wheel={{ step: 0.05 }}>
             <TransformComponent>
-              <div className="min-h-[80vh] w-full">
+              <div className="min-h-[50vh] w-full">
                 <JapanMap
                   edges={allEdges}
                   focusedPrefecture={selectedPrefecture}
@@ -149,6 +149,32 @@ const Index: NextPage<Props> = ({
               </div>
             </TransformComponent>
           </TransformWrapper>
+        </div>
+      </div>
+      <div className="flex flex-col gap-y-1 rounded py-5 px-5 text-xs">
+        <div className="flex gap-x-2">
+          <span className="font-bold text-[#ffaa00]">ー</span>
+          <span className="text-[#aaaaaa]">直接のつながりがある</span>
+        </div>
+        <div className="flex gap-x-2">
+          <span className="font-bold text-[#00aaff]">ー</span>
+          <span className="text-[#aaaaaa]">オンラインのつながりがある</span>
+        </div>
+        <div className="flex gap-x-2">
+          <span className="text-[#ffaa00]">■</span>
+          <span className="text-[#aaaaaa]">直接あなたとのつながりがある</span>
+        </div>
+        <div className="flex gap-x-2">
+          <span className="text-[#00aaff]">■</span>
+          <span className="text-[#aaaaaa]">
+            オンラインであなたとのつながりがある
+          </span>
+        </div>
+        <div className="flex gap-x-2">
+          <span className="text-[#ccffcc]">■</span>
+          <span className="text-[#aaaaaa]">
+            オンラインと直接の両方であなたとのつながりがある
+          </span>
         </div>
       </div>
 
