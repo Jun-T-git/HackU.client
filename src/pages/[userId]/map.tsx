@@ -69,13 +69,11 @@ const Index: NextPage<Props> = ({
 
   useEffect(() => {
     (async () => {
-      console.log(router.query.userId as string);
       const connectionsByUser = await fetchConnectionsByUser({
         userId: router.query.userId as string,
       });
       setPrefectureColors(getPrefectureColors(connectionsByUser));
       setConnectedUsers(getConnectedUsers(connectionsByUser));
-      console.log("done");
     })();
   }, [isConnectModalOpen]);
 
