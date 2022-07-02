@@ -72,9 +72,7 @@ export const connectionsToPrefectureColors = (
   return prefectureColors;
 };
 
-export const getPrefectureColors = async (
-  connectionsByUser
-): Promise<PrefectureColors> => {
+export const getPrefectureColors = (connectionsByUser): PrefectureColors => {
   const offlineConnections = connectionsByUser["offline_connections"];
   const onlineConnections = connectionsByUser["online_connections"];
   const offlineColors = connectionsToPrefectureColors(
@@ -141,9 +139,7 @@ const hex2rgba = (hex: string): number[] => {
   });
 };
 
-export const getConnectedUsers = async (
-  connectionsByUser
-): Promise<ConnectedUsers> => {
+export const getConnectedUsers = (connectionsByUser): ConnectedUsers => {
   const offlineConnections = connectionsByUser["offline_connections_detail"];
   const onlineConnections = connectionsByUser["online_connections_detail"];
   const connectedUsers = {};

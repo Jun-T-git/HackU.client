@@ -30,16 +30,16 @@ type Props = {
   usersByPrefecture: UsersByPrefecture | null;
   geo: Geo;
   allEdges: Edge[];
-  prefectureColors: PrefectureColors;
-  connectedUsers: ConnectedUsers;
+  staticPrefectureColors: PrefectureColors;
+  staticConnectedUsers: ConnectedUsers;
 };
 
 const Index: NextPage<Props> = ({
   usersByPrefecture,
   geo,
   allEdges,
-  prefectureColors,
-  connectedUsers,
+  staticPrefectureColors,
+  staticConnectedUsers,
 }) => {
   const signedInUser = useRecoilValue(userState);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
@@ -49,6 +49,11 @@ const Index: NextPage<Props> = ({
   const [isConnectModalOpen, setIsConnectModalOpen] = useState<boolean>(false);
   const [userToConnect, setUserToConnect] = useState<UserToConnect>(null);
   const [isEdgeVisible, setIsEdgeVisible] = useState<boolean>(false);
+  const [prefectureColors, setPrefectureColors] = useState<PrefectureColors>(
+    staticPrefectureColors
+  );
+  const [connectedUsers, setConnectedUsers] =
+    useState<ConnectedUsers>(staticConnectedUsers);
 
   const router = useRouter();
 
@@ -61,6 +66,18 @@ const Index: NextPage<Props> = ({
       router.push("/");
     }
   }, [signedInUser.userId, router.isReady, router.query.userId]);
+
+  useEffect(() => {
+    (async () => {
+      console.log(router.query.userId as string);
+      const connectionsByUser = await fetchConnectionsByUser({
+        userId: router.query.userId as string,
+      });
+      setPrefectureColors(getPrefectureColors(connectionsByUser));
+      setConnectedUsers(getConnectedUsers(connectionsByUser));
+      console.log("done");
+    })();
+  }, [isConnectModalOpen]);
 
   if (
     !router.isReady ||
@@ -244,8 +261,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const allEdges = await getAllEdges();
   const userId = params.userId as string;
   const connectionsByUser = await fetchConnectionsByUser({ userId: userId });
-  const prefectureColors = await getPrefectureColors(connectionsByUser);
-  const connectedUsers = await getConnectedUsers(connectionsByUser);
+  const prefectureColors = getPrefectureColors(connectionsByUser);
+  const connectedUsers = getConnectedUsers(connectionsByUser);
   return {
     props: {
       usersByPrefecture,
