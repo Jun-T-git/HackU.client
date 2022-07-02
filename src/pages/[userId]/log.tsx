@@ -80,26 +80,26 @@ export const getStaticPaths: GetStaticPaths = async () => {
   // const paths = await getLogoPaths();
   const paths = [
     "/id120/log",
-    // "/id121/log",
-    // "/id122/log",
-    // "/id123/log",
-    // "/id124/log",
-    // "/id125/log",
-    // "/id126/log",
-    // "/id127/log",
-    // "/id128/log",
-    // "/id129/log",
-    // "/id130/log",
-    // "/id131/log",
-    // "/id132/log",
-    // "/id133/log",
-    // "/id134/log",
-    // "/id135/log",
-    // "/id136/log",
-    // "/id137/log",
-    // "/id138/log",
-    // "/id139/log",
-    // "/id140/log",
+    "/id121/log",
+    "/id122/log",
+    "/id123/log",
+    "/id124/log",
+    "/id125/log",
+    "/id126/log",
+    "/id127/log",
+    "/id128/log",
+    "/id129/log",
+    "/id130/log",
+    "/id131/log",
+    "/id132/log",
+    "/id133/log",
+    "/id134/log",
+    "/id135/log",
+    "/id136/log",
+    "/id137/log",
+    "/id138/log",
+    "/id139/log",
+    "/id140/log",
   ];
   return {
     paths,
@@ -110,7 +110,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const userId = params.userId as string;
   const connectLogs = await getConnectLogs(userId);
-  console.log(connectLogs);
   return {
     props: { connectLogs },
     revalidate: 10,
