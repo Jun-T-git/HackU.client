@@ -161,12 +161,12 @@ export const getConnectedUsers = (connectionsByUser): ConnectedUsers => {
 };
 
 export const getConnectLogs = async (userId: string): Promise<ConnectLog[]> => {
-  const connectionsByUser = await fetchConnectionsByUser({ userId: userId });
-  const offlineConnections = connectionsByUser["offline_connections_detail"];
-  const onlineConnections = connectionsByUser["online_connections_detail"];
-  // const connectionsByUser = await fetchLog({ userId: userId });
-  // const offlineConnections = connectionsByUser["offline_log"];
-  // const onlineConnections = connectionsByUser["online_log"];
+  // const connectionsByUser = await fetchConnectionsByUser({ userId: userId });
+  // const offlineConnections = connectionsByUser["offline_connections_detail"];
+  // const onlineConnections = connectionsByUser["online_connections_detail"];
+  const connectionsByUser = await fetchLog({ userId: userId });
+  const offlineConnections = connectionsByUser["offline_log"];
+  const onlineConnections = connectionsByUser["online_log"];
   const offlineLogs = offlineConnections
     .map((connectedUsers, prefectureId) => {
       return connectedUsers.map((connectedUser) => {
